@@ -1,0 +1,9 @@
+{% extends "app/base.html" %}
+{% load static %}
+{% block content %}
+
+{% if request.user.is_authenticated %}
+<h2>Yep</h2>
+{{ request.user.username }}
+{% endif %}
+{% endblock %}
