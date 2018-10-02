@@ -1,0 +1,11 @@
+{% extends "app/base.html" %}
+{% block content %}
+  <h1>Identification:</h1>
+  <form id="login-form" action="." method="post">
+    {% csrf_token %}
+    <input type="hidden" name="next" value="/">
+    {{ form.username }}
+    {{ form.password }}
+    <button type="submit" class="btn btn-primary" name="button">Se connecter</button>
+  </form>
+{% endblock %}
