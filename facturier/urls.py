@@ -18,7 +18,7 @@ from django.contrib import admin
 
 from django.conf import settings
 from django.conf.urls.static import static
-from app.views import IndexView
+from app.views import IndexView, CustomerCreateView
 
 from django.contrib.auth import views as auth_views
 
@@ -27,6 +27,8 @@ urlpatterns = [
 
     url(r'^login/$', auth_views.LoginView.as_view(), name='login'),
     url(r'^logout/$', auth_views.LogoutView.as_view(next_page='/')),
+
+    url(r'^customer/create/', CustomerCreateView.as_view(), name='customer-create'),
 
     url(r'^$', IndexView.as_view(), name="index"),
 ]
