@@ -26,8 +26,19 @@ class Product(models.Model):
     def __unicode__(self):
         return self.name
 
-# class ProductList(models.Model):
+
+class Quotation(models.Model):
+    customer = models.ForeignKey(Customer,on_delete=models.CASCADE)
+    reference = models.IntegerField(verbose_name="Référence")
+
+    def __unicode__(self):
+        return self.reference
 
 
+class ProductList(models.Model):
+    product = models.ForeignKey(Product,on_delete=models.CASCADE)
+    quantity = models.IntegerField(verbose_name="Quantité")
+    quotation = models.ForeignKey(Quotation,on_delete=models.CASCADE)
 
-
+    def __unicode__(self):
+        return self.quotation.reference
