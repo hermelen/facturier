@@ -19,6 +19,7 @@ from django.contrib import admin
 from django.conf import settings
 from django.conf.urls.static import static
 from app.views import IndexView, CustomerCreateView
+from django.urls import reverse
 
 from django.contrib.auth import views as auth_views
 

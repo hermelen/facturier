@@ -7,7 +7,7 @@ class Customer(models.Model):
     first_name = models.CharField(max_length=100, verbose_name="Prénom", null=True, blank=True)
     last_name  = models.CharField(max_length=100, verbose_name="Nom", null=True, blank=True)
     company    = models.CharField(max_length=100, verbose_name="Entreprise", null=True, blank=True)
-    slug       = models.SlugField(max_length=100, verbose_name="Entreprise", null=True, blank=True)
+    slug       = models.SlugField(max_length=100, verbose_name="Slug", null=True, blank=True)
     email      = models.EmailField(max_length=200, verbose_name="E-mail", null=True, blank=True)
     address    = models.CharField(max_length=150, verbose_name="Adresse", null=True, blank=True)
     zipcode    = models.CharField(max_length=10, verbose_name="Code Postal", null=True, blank=True)

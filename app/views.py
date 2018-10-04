@@ -14,6 +14,9 @@ class IndexView(TemplateView):
     def get_context_data(self, **kwargs):
         context = TemplateView.get_context_data(self, **kwargs)
 
-class CustomerCreateView(CreateView):     
+class CustomerCreateView(CreateView):
     model = Customer
     fields = '__all__'
+
+    def get_success_url(self):
+        return reverse("index")

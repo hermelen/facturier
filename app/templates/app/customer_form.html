@@ -1,7 +1,11 @@
 {% extends "app/base.html" %}
 {% load static %}
-{% block content %}
 
-{{ form.as_p }}
+{% block content %}
+<form  action="." method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary" name="button">Se connecter</button>
+</form>
 
 {% endblock %}
