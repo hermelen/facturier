@@ -4,14 +4,15 @@ from __future__ import unicode_literals
 from django.contrib.gis.db import models
 
 class Customer(models.Model):
-    first_name = models.CharField(max_length=100, verbose_name="Prénom", null=True, blank=True)
-    last_name  = models.CharField(max_length=100, verbose_name="Nom", null=True, blank=True)
-    company    = models.CharField(max_length=100, verbose_name="Entreprise", null=True, blank=True)
-    slug       = models.SlugField(max_length=100, verbose_name="Slug", null=True, blank=True)
-    email      = models.EmailField(max_length=200, verbose_name="E-mail", null=True, blank=True)
-    address    = models.CharField(max_length=150, verbose_name="Adresse", null=True, blank=True)
-    zipcode    = models.CharField(max_length=10, verbose_name="Code Postal", null=True, blank=True)
-    city       = models.CharField(max_length=50, verbose_name="Ville", null=True, blank=True)
+    first_name   = models.CharField(max_length=100, verbose_name="Prénom", null=True, blank=True)
+    last_name    = models.CharField(max_length=100, verbose_name="Nom", null=True, blank=True)
+    company      = models.CharField(max_length=100, verbose_name="Entreprise", null=True, blank=True)
+    phone_number = models.CharField(max_length=12, verbose_name="Téléphone", null=True, blank=True)
+    slug         = models.SlugField(max_length=100, verbose_name="Slug", null=True, blank=True)
+    email        = models.EmailField(max_length=200, verbose_name="E-mail", null=True, blank=True)
+    address      = models.CharField(max_length=150, verbose_name="Adresse", null=True, blank=True)
+    zipcode      = models.CharField(max_length=10, verbose_name="Code Postal", null=True, blank=True)
+    city         = models.CharField(max_length=50, verbose_name="Ville", null=True, blank=True)
 
     def __unicode__(self):
         return self.last_name

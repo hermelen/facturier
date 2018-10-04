@@ -26,7 +26,7 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
 
     url(r'^login/$', auth_views.LoginView.as_view(), name='login'),
-    url(r'^logout/$', auth_views.LogoutView.as_view(next_page='/')),
+    url(r'^logout/$', auth_views.LogoutView.as_view(next_page='/'), name='logout'),
 
     url(r'^customers/', CustomerListView.as_view(), name='customers-list'),
     url(r'^customer/create/', CustomerCreateView.as_view(), name='customer-create'),
