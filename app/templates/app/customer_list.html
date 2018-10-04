@@ -3,15 +3,14 @@
 
 {% block content %}
 {% for customer in object_list %}
-<div class="card">
-  <h3>{{ customer.company }}</h3>
-  <h4>{{ customer.first_name }}</h4>
-  <p>{{ customer.last_name }}</p>
-  <p>{{ customer.slug }}</p>
-  <p>{{ customer.email }}</p>
-  <p>{{ customer.address }}</p>
-  <p>{{ customer.zipcode }}</p>
-  <p>{{ customer.city }}</p>
+<div class="col-md-4">
+    <div class="card">
+        <h3> Société : {{ customer.company }}</h3>
+        <h4>{{ customer.first_name }} {{ customer.last_name }}</h4>
+        <p>{{ customer.phone_number }}</p>
+        <a href="{% url 'customer-detail' customer.slug %}" class="btn btn-secondary" style="width: 6em;">Voir plus</a>
+        <a href="{% url 'customer-update' customer.slug %}" class="btn btn-info" style="width: 6em;">Modifier</a>
+    </div>
 </div>
 {% endfor %}
 {% endblock %}
