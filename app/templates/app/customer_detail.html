@@ -2,13 +2,14 @@
 {% load static %}
 
 {% block content %}
-{{object.company}}
-{{object.first_name}}
-
-{{object.last_name}}
-
-{{object.slug}}
-
-{{object.email}}
-
+<div class="card">
+  <h3>{{ object.company }}</h3>
+  <h4>{{ object.first_name }}</h4>
+  <p>{{ object.last_name }}</p>
+  <p>{{ object.slug }}</p>
+  <p>{{ object.email }}</p>
+  <p>{{ object.address }}</p>
+  <p>{{ object.zipcode }}</p>
+  <p>{{ object.city }}</p>
+</div>
 {% endblock %}

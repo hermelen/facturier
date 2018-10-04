@@ -1,0 +1,17 @@
+{% extends "app/base.html" %}
+{% load static %}
+
+{% block content %}
+{% for customer in object_list %}
+<div class="card">
+  <h3>{{ customer.company }}</h3>
+  <h4>{{ customer.first_name }}</h4>
+  <p>{{ customer.last_name }}</p>
+  <p>{{ customer.slug }}</p>
+  <p>{{ customer.email }}</p>
+  <p>{{ customer.address }}</p>
+  <p>{{ customer.zipcode }}</p>
+  <p>{{ customer.city }}</p>
+</div>
+{% endfor %}
+{% endblock %}
