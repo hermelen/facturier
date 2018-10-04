@@ -18,7 +18,7 @@ from django.contrib import admin
 
 from django.conf import settings
 from django.conf.urls.static import static
-from app.views import IndexView, CustomerCreateView, CustomerDetailView
+from app.views import IndexView, CustomerCreateView, CustomerDetailView, CustomerUpdateView, CustomerDeleteView
 
 from django.contrib.auth import views as auth_views
 
@@ -29,7 +29,8 @@ urlpatterns = [
     url(r'^logout/$', auth_views.LogoutView.as_view(next_page='/')),
 
     url(r'^customer/create/', CustomerCreateView.as_view(), name='customer-create'),
-
+    url(r'^customer/(?P<slug>[-\w]+)/delete/$', CustomerDeleteView.as_view(), name="customer-delete"),
+    url(r'^customer/(?P<slug>[-\w]+)/edit/$', CustomerUpdateView.as_view(), name="customer-update"),
     url(r'^customer/(?P<slug>[-\w]+)/$', CustomerDetailView.as_view(), name='customer-detail'),
     url(r'^$', IndexView.as_view(), name="index"),
 
