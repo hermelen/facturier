@@ -2,14 +2,17 @@
 {% load static %}
 
 {% block content %}
-<div class="card">
-  <h3>{{ object.company }}</h3>
-  <h4>{{ object.first_name }}</h4>
-  <p>{{ object.last_name }}</p>
-  <p>{{ object.slug }}</p>
-  <p>{{ object.email }}</p>
-  <p>{{ object.address }}</p>
-  <p>{{ object.zipcode }}</p>
-  <p>{{ object.city }}</p>
+
+<div class="col-md-4">
+    <div class="card">
+        <h3> Société : {{ customer.company }}</h3>
+        <h4>{{ customer.first_name }} {{ customer.last_name }}</h4>
+        <p>Téléphone : {{ customer.phone_number }}</p>
+        <p>Email : {{ customer.email }}</p>
+        <p>{{ customer.address }}</p>
+        <p>{{ customer.address }} address</p>
+        <a href="{% url 'customer-update' customer.slug %}" class="btn btn-info" style="width: 6em;">Modifier</a>
+        <a href="{% url 'customer-delete' customer.slug %}" class="btn btn-secondary" style="width: 6em;">Supprimer</a>
+    </div>
 </div>
 {% endblock %}

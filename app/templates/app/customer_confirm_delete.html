@@ -5,5 +5,7 @@
 <form action="" method="post">{% csrf_token %}
     <p>Are you sure you want to delete "{{ object }}"?</p>
     <input type="submit" value="Confirm" />
+    <a href="{% url 'customers-list' %}" class="btn btn-secondary" style="width: 6em;">Abandonner</a>
+
 </form>
 {% endblock %}
