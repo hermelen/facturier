@@ -18,8 +18,7 @@ from django.contrib import admin
 
 from django.conf import settings
 from django.conf.urls.static import static
-from app.views import IndexView, CustomerCreateView
-from django.urls import reverse
+from app.views import IndexView, CustomerCreateView, CustomerDetailView
 
 from django.contrib.auth import views as auth_views
 
@@ -31,5 +30,7 @@ urlpatterns = [
 
     url(r'^customer/create/', CustomerCreateView.as_view(), name='customer-create'),
 
+    url(r'^customer/(?P<slug>[-\w]+)/$', CustomerDetailView.as_view(), name='customer-detail'),
     url(r'^$', IndexView.as_view(), name="index"),
+
 ]
