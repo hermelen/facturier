@@ -1,2 +1,4 @@
 Django==1.11.16
+django-autoslug==1.9.3
+psycopg2==2.7.5
 pytz==2018.5

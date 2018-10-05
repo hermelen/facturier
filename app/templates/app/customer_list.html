@@ -1,16 +1,35 @@
 {% extends "app/base.html" %}
 {% load static %}
-
+{% block left %}
+  {% if request.user.is_authenticated %}
+  <div class="col-12">
+      <div class="card">
+        <div class="card-body">
+          <h4>{{ request.user.first_name }} {{ request.user.last_name }}</h4>
+          <h5> Rôle: {{ request.user.username }}</h3>
+          <p>Email: {{ request.user.email }}</p>
+        </div>
+      </div>
+  </div>
+  {% endif %}
+{% endblock %}
 {% block content %}
-{% for customer in object_list %}
-<div class="col-md-4">
+  {% for customer in object_list %}
+  <div class="col-12 col-lg-6">
     <div class="card">
-        <h3> Société : {{ customer.company }}</h3>
-        <h4>{{ customer.first_name }} {{ customer.last_name }}</h4>
-        <p>{{ customer.phone_number }}</p>
-        <a href="{% url 'customer-detail' customer.slug %}" class="btn btn-secondary" style="width: 6em;">Voir plus</a>
-        <a href="{% url 'customer-update' customer.slug %}" class="btn btn-info" style="width: 6em;">Modifier</a>
+      <div class="card-body">
+        <h5 class="card-title"> Société : {{ customer.company }}</h5>
+        <p class="card-text">{{ customer.first_name }} {{ customer.last_name }}</p>
+      </div>
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item">{{ customer.phone_number }}</li>
+        <li class="list-group-item">{{ customer.email }}</li>
+      </ul>
+      <div class="card-body btn-container">
+        <a href="{% url 'customer-detail' customer.slug %}" class="btn btn-secondary">Voir plus</a>
+        <a href="{% url 'customer-update' customer.slug %}" class="btn btn-info">Modifier</a>
+      </div>
     </div>
-</div>
-{% endfor %}
+  </div>
+  {% endfor %}
 {% endblock %}

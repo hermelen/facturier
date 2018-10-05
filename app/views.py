@@ -1,13 +1,12 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 from django.contrib.auth.models import User
-from django.views.generic import ListView
-from django.views.generic import TemplateView, DetailView
+from django.views.generic import TemplateView, DetailView, ListView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.shortcuts import render
-
-from models import Customer
 from django.urls import reverse
+
+from .models import Customer
 
 # Create your views here.
 class IndexView(TemplateView):

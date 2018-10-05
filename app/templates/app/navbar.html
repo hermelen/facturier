@@ -1,9 +1,10 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="{% url 'index' %">Facturier</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
-      <li class="nav-item active">
-        <a class="nav-link" href="{% url 'index' %}">Home</a>
-      </li>
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           Connection
@@ -14,6 +15,7 @@
           <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
           {% else %}
           <a class="dropdown-item" href="{% url 'login' %}">Login</a>
+          <!-- <a class="dropdown-item nav-bar-login" href="#">Login</a> -->
           {% endif %}
         </div>
       </li>
@@ -29,7 +31,7 @@
         </div>
       </li>
     </ul>
-    <!-- <form class="form-inline" method="get" action="{% url 'index' %}">
+    <form class="form-inline" method="get" action="{% url 'index' %}">
         <div class="input-group">
             <input name="q" type="text" class="form-control" aria-label="Recipient's username" aria-describedby="button-addon2">
             <div class="input-group-append">
@@ -38,6 +40,6 @@
                 </button>
             </div>
         </div>
-    </form> -->
+    </form>
   </div>
 </nav>
