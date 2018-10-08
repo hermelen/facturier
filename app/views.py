@@ -7,6 +7,7 @@ from django.shortcuts import render
 from django.urls import reverse
 
 from .models import Customer, Product, Quotation
+from .forms import QuotationFormSet
 
 # Create your views here.
 class IndexView(TemplateView):
@@ -100,6 +101,24 @@ class QuotationCreateView(CreateView):
     model = Quotation
     fields = "__all__"
 
+    def get_context_data(self, **kwargs):
+        data = super(QuotationCreateView, self).get_context_data(**kwargs)
+        if self.request.POST:
+            data['quotationData'] = QuotationFormSet(self.request.POST)
+        else:
+            data['quotationData'] = QuotationFormSet()
+        return data
+
+    # def form_valid(self, form):
+    #     context = self.get_context_data()
+    #     quotationData = context['quotationData']
+    #     with transaction.atomic():
+    #         self.object = form.save()
+    #
+    #         if quotationData.is_valid():
+    #             quotationData.instance = self.object
+    #             quotationData.save()
+    #     return super(QuotationCreateView, self).form_valid(form)
 
     def get_success_url(self):
         return reverse("quotation-detail")
