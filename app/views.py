@@ -96,5 +96,10 @@ class QuotationDetailView(DetailView):
     model = Quotation
 
 
-# class QuotationCreateView(CreateView):
-#     model = Quotation
+class QuotationCreateView(CreateView):
+    model = Quotation
+    fields = "__all__"
+
+
+    def get_success_url(self):
+        return reverse("quotation-detail")

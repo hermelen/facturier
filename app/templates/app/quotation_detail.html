@@ -1,0 +1,31 @@
+{% extends "app/base.html" %}
+{% load static %}
+{% block left %}
+  {% if request.user.is_authenticated %}
+  <div class="col-12">
+      <div class="card">
+        <div class="card-body">
+          <h4>{{ request.user.first_name }} {{ request.user.last_name }}</h4>
+          <h5> Rôle: {{ request.user.username }}</h3>
+          <p>Email: {{ request.user.email }}</p>
+        </div>
+      </div>
+  </div>
+  {% endif %}
+{% endblock %}
+{% block content %}
+<div class="col-12 col-lg-6">
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title"> Société : {{ quotation.customer.company }}</h5>
+            <p class="card-text">{{ quotation.reference }}</p>
+        </div>
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item">Date de création : {{ quotation.creation_date }}</li>
+            <li class="list-group-item">Date de modification : {{ quotation.edition_date }}</li>
+            <li class="list-group-item">Date limite : {{ quotation.limit_date }}</li>
+
+        </ul>
+    </div>
+</div>
+{% endblock %}
