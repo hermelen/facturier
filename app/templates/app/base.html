@@ -1,9 +1,41 @@
-{% include "app/header.html" %}
-{% include "app/navbar.html" %}
-<div class="container">
-  <div class="row">
-    {% block content %}
-    {% endblock %}
-  {% include "app/footer.html" %}
-  </div>
-</div>
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Facturier</title>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css">
+    <link rel="stylesheet" type="text/css" href="{% static 'bootstrap/dist/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+  </head>
+  <body>
+    {% include "app/navbar.html" %}
+    <div class="container">
+      <div class="row">
+        {% if request.user.is_authenticated %} <!-- sidebar if user is authenticated -->
+        <div class="col-12 col-sm-4">
+        {% else %}
+        <div class="col-12">
+        {% endif %}
+          <div class="row">
+            {% block left %}
+            {% endblock %}
+          </div>
+        </div>
+        {% if request.user.is_authenticated %} <!-- sidebar if user is authenticated -->
+        <div class="col-12 col-sm-8">
+        {% else %}
+        <div class="col-12">
+        {% endif %}
+          <div class="row">
+            {% block content %}
+            {% endblock %}
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="{% static 'jquery/dist/jquery.min.js' %}"></script>
+    <script src="{% static 'bootstrap/dist/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'js/script.js' %}"></script>
+  </body>
+</html>

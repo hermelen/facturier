@@ -4,3 +4,11 @@ form {
     justify-content: space-between;
   }
 }
+
+div.card-body.btn-container{
+  display: flex;
+  justify-content: space-between;
+  a.btn {
+    // width: 100%;
+  }
+}
