@@ -7,7 +7,7 @@ from django.shortcuts import render
 from django.urls import reverse
 
 from .models import Customer, Product, Quotation, ProductList
-from .forms import QuotationFormSet
+# from .forms import QuotationFormSet
 
 from extra_views import InlineFormSet, CreateWithInlinesView, UpdateWithInlinesView
 from extra_views.generic import GenericInlineFormSet
@@ -102,21 +102,28 @@ class QuotationDetailView(DetailView):
 
 class ProductListInline(InlineFormSet):
     model = ProductList
-
-
-class  QuotationCreateView(CreateWithInlinesView):
-    model = Quotation
-    inlines = [ProductListInline]
     fields = "__all__"
+
+
+class QuotationCreateView(CreateWithInlinesView):
+    model = Quotation
+    inlines = [ProductListInline,]
+    fields = "__all__"
+    template_name = 'app/quotation_form.html'
+    success_url = '/'
 
 
     def get_success_url(self):
         return reverse("index")
 
 
+# class CommandLineInline(InlineFormSet):
+#    model = CommandLine
+#    fields = "__all__"
+
 # class QuotationCreateView(CreateWithInlinesView):
-#     model = Quotation
-#     inline_model = ProductList
-#
-#     def get_success_url(self):
-#         return reverse("index")
+#    model = Quotation
+#    inlines = [CommandLineInline,]
+#    fields = ("customer","type","status",)
+#    template_name = 'facturier/quotation_form.html'
+#    success_url = '/'
