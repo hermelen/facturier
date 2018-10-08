@@ -6,7 +6,7 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.shortcuts import render
 from django.urls import reverse
 
-from .models import Customer
+from .models import Customer, Product
 
 # Create your views here.
 class IndexView(TemplateView):
@@ -53,3 +53,33 @@ class CustomerListView(ListView):
             return queryset
         else:
             return Customer.objects.all()
+
+
+class ProductCreateView(CreateView):
+    model = Product
+    fields = '__all__'
+
+    def get_success_url(self):
+        return reverse("product-detail", args=[self.object.slug])
+
+
+class ProductDetailView(DetailView):
+    model = Product
+
+
+class ProductListView(ListView):
+    model = Product
+
+class ProductUpdateView(UpdateView):
+    model = Product
+    fields = "__all__"
+
+    def get_success_url(self):
+        return reverse("product-detail", args=[self.object.slug])
+
+
+class ProductDeleteView(DeleteView):
+    model = Product
+
+    def get_success_url(self):
+        return reverse("products-list")

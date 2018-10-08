@@ -1,0 +1,28 @@
+{% extends "app/base.html" %} {% load static %} {% block left %} {% if request.user.is_authenticated %}
+<div class="col-12">
+    <div class="card">
+        <div class="card-body">
+            <h4>{{ request.user.first_name }} {{ request.user.last_name }}</h4>
+            <h5> Rôle: {{ request.user.username }}</h3>
+          <p>Email: {{ request.user.email }}</p>
+        </div>
+      </div>
+  </div>
+  {% endif %}
+{% endblock %}
+{% block content %}
+<div class="col-12 col-lg-6">
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">{{ product.name }} ref : {{ product.ref }}</h5>
+            <p class="card-text">{{ product.short_desc }}</p>
+            <p class="card-text">{{ product.decription }}</p>
+        </div>
+        <div class="card-header">{{ product.price }}</div>
+        <div class="card-body btn-container">
+            <a href="{% url 'product-update' product.slug %}" class="btn btn-info">Modifier</a>
+            <a href="{% url 'product-delete' product.slug %}" class="btn btn-secondary">Supprimer</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

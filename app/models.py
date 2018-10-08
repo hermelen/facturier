@@ -32,7 +32,7 @@ class Product(models.Model):
     price       = models.FloatField(verbose_name="Price", null=True, blank=True) #floatfield
 
     def full_name(self):
-        return "%s %s" %(self.name, self.ref)
+        return "%s %s" %(self.name, self.ref)#construc du slug à partir de name et ref
 
     def __unicode__(self):
         return self.name
