@@ -22,7 +22,7 @@ from django.contrib.auth import views as auth_views
 
 from app.views import IndexView, CustomerCreateView, CustomerDetailView, CustomerUpdateView, CustomerDeleteView, CustomerListView
 from app.views import ProductCreateView, ProductDetailView, ProductUpdateView,ProductListView, ProductDeleteView
-
+from app.views import QuotationDetailView
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
 
@@ -40,6 +40,8 @@ urlpatterns = [
     url(r'^product/(?P<slug>[-\w]+)/delete/$', ProductDeleteView.as_view(), name="product-delete"),
     url(r'^product/(?P<slug>[-\w]+)/edit/$', ProductUpdateView.as_view(), name="product-update"),
     url(r'^product/(?P<slug>[-\w]+)/$', ProductDetailView.as_view(), name='product-detail'),
+
+    url(r'^quotation/(?P<slug>[-\w]+)/$', QuotationDetailView.as_view(), name='quotation-detail'),
 
 
 

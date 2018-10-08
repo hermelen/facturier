@@ -20,7 +20,7 @@ class QuotationAdmin(admin.ModelAdmin):
     inlines = [
         ProductListInline,
     ]
-    list_display = ('customer','reference', 'status')
+    list_display = ('customer','reference', 'status','creation_date','edition_date','limit_date')
 
 
 
