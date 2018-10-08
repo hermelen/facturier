@@ -48,7 +48,6 @@ class CustomerListView(ListView):
     def get_queryset(self):
         q = self.request.GET.get('q', None)
         if q is not None:
-            # queryset = Customer.objects.filter(company__startswith = q)
             queryset = Customer.objects.filter(company__icontains = q)
             return queryset
         else:
@@ -69,6 +68,14 @@ class ProductDetailView(DetailView):
 
 class ProductListView(ListView):
     model = Product
+
+    def get_queryset(self):
+        q = self.request.GET.get('q', None)
+        if q is not None:
+            queryset = Product.objects.filter(name__icontains = q)
+            return queryset
+        else:
+            return Product.objects.all()
 
 class ProductUpdateView(UpdateView):
     model = Product
