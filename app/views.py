@@ -44,3 +44,12 @@ class CustomerDeleteView(DeleteView):
 
 class CustomerListView(ListView):
     model = Customer
+
+    def get_queryset(self):
+        q = self.request.GET.get('q', None)
+        if q is not None:
+            # queryset = Customer.objects.filter(company__startswith = q)
+            queryset = Customer.objects.filter(company__icontains = q)
+            return queryset
+        else:
+            return Customer.objects.all()
