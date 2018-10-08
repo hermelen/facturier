@@ -6,10 +6,12 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.shortcuts import render
 from django.urls import reverse
 
-from .models import Customer, Product, Quotation
+from .models import Customer, Product, Quotation, ProductList
 from .forms import QuotationFormSet
 
-# Create your views here.
+from extra_views import InlineFormSet, CreateWithInlinesView, UpdateWithInlinesView
+from extra_views.generic import GenericInlineFormSet
+
 class IndexView(TemplateView):
     template_name = "app/index.html"
 
@@ -97,28 +99,24 @@ class QuotationDetailView(DetailView):
     model = Quotation
 
 
-class QuotationCreateView(CreateView):
+
+class ProductListInline(InlineFormSet):
+    model = ProductList
+
+
+class  QuotationCreateView(CreateWithInlinesView):
     model = Quotation
+    inlines = [ProductListInline]
     fields = "__all__"
 
-    def get_context_data(self, **kwargs):
-        data = super(QuotationCreateView, self).get_context_data(**kwargs)
-        if self.request.POST:
-            data['quotationData'] = QuotationFormSet(self.request.POST)
-        else:
-            data['quotationData'] = QuotationFormSet()
-        return data
-
-    # def form_valid(self, form):
-    #     context = self.get_context_data()
-    #     quotationData = context['quotationData']
-    #     with transaction.atomic():
-    #         self.object = form.save()
-    #
-    #         if quotationData.is_valid():
-    #             quotationData.instance = self.object
-    #             quotationData.save()
-    #     return super(QuotationCreateView, self).form_valid(form)
 
     def get_success_url(self):
-        return reverse("quotation-detail")
+        return reverse("index")
+
+
+# class QuotationCreateView(CreateWithInlinesView):
+#     model = Quotation
+#     inline_model = ProductList
+#
+#     def get_success_url(self):
+#         return reverse("index")
