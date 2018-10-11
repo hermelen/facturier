@@ -20,7 +20,7 @@ class Customer(models.Model):
         return "%s %s %s" %(self.company, self.first_name, self.last_name)
 
     def __unicode__(self):
-        return self.last_name
+        return self.company
 
 
 class Product(models.Model):
@@ -40,7 +40,9 @@ class Product(models.Model):
 quotationStatus = [
     (1, "devis en cours"),
     (2, "devis annulé"),
-    (3, "facture"),
+    (3, "facture en attente"),
+    (4, "facture à relancer"),
+    (5, "facture réglée"),
 ]
 
 class Quotation(models.Model):

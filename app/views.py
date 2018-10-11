@@ -95,11 +95,6 @@ class ProductDeleteView(DeleteView):
         return reverse("products-list")
 
 
-class QuotationDetailView(DetailView):
-    model = Quotation
-
-
-
 class ProductListInline(InlineFormSet):
     model = ProductList
     fields = "__all__"
@@ -112,18 +107,32 @@ class QuotationCreateView(CreateWithInlinesView):
     template_name = 'app/quotation_form.html'
     success_url = '/'
 
-
     def get_success_url(self):
-        return reverse("index")
+        return reverse("quotation-detail", args=[self.object.slug])
 
 
-# class CommandLineInline(InlineFormSet):
-#    model = CommandLine
-#    fields = "__all__"
+class QuotationDetailView(DetailView):
+    model = Quotation
 
-# class QuotationCreateView(CreateWithInlinesView):
-#    model = Quotation
-#    inlines = [CommandLineInline,]
-#    fields = ("customer","type","status",)
-#    template_name = 'facturier/quotation_form.html'
-#    success_url = '/'
+
+class QuotationListView(ListView):
+    model = Quotation
+
+    def get_context_data(self, *args, **kwargs):
+        context = ListView.get_context_data(self, *args, **kwargs)
+        context["choices"] = [
+            (1, "devis en cours"),
+            (2, "devis annulé"),
+            (3, "facture en attente"),
+            (4, "facture à relancer"),
+            (5, "facture réglée"),
+        ]
+        return context
+
+    def get_queryset(self):
+        q = self.request.GET.get('q', None)
+        if q is not None:
+            queryset = Quotation.objects.filter(status = q)
+            return queryset
+        else:
+            return Quotation.objects.all()

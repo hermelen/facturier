@@ -1,0 +1,47 @@
+{% extends "app/base.html" %}
+{% load static %}
+{% block left %}
+  {% if request.user.is_authenticated %}
+  <div class="col-12">
+      <div class="card">
+        <div class="card-body">
+          <h4>{{ request.user.first_name }} {{ request.user.last_name }}</h4>
+          <h5> Rôle: {{ request.user.username }}</h3>
+          <p>Email: {{ request.user.email }}</p>
+        </div>
+      </div>
+  </div>
+  {% endif %}
+{% endblock %}
+{% block content %}
+  {% for quotation in object_list %}
+  <div class="col-12 col-lg-6">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title"> Société: {{ quotation.customer.company }}</h5>
+        <p class="card-text">Réf: {{ quotation.reference }}</p>
+      </div>
+      <ul class="list-group list-group-flush">
+        {% if quotation.status == 1 %}
+        <li class="list-group-item">devis en cours</li>
+        {% elif quotation.status == 2 %}
+        <li class="list-group-item">devis annulé</li>
+        {% elif quotation.status == 3 %}
+        <li class="list-group-item">facture en attente</li>
+        {% elif quotation.status == 4 %}
+        <li class="list-group-item">facture à relancer</li>
+        {% else %}
+        <li class="list-group-item">{facture réglée</li>
+        {% endif %}
+        <li class="list-group-item">Date de création: {{ quotation.creation_date|date:"d/m/Y" }}</li>
+        <li class="list-group-item">Date de modification: {{ quotation.edition_date|date:"d/m/Y" }}</li>
+        <li class="list-group-item">Date limite: {{ quotation.limit_date|date:"d/m/Y" }}</li>
+      </ul>
+      <div class="card-body btn-container">
+        <a href="{% url 'quotation-detail' quotation.slug %}" class="btn btn-secondary">Voir plus</a>
+
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+{% endblock %}
