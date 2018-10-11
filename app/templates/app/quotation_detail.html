@@ -52,11 +52,11 @@
   </thead>
   <tbody class="mb-5">
     {% for line in quotation.productlist_set.all %}
-    <tr>
+    <tr class="single-line">
       <th scope="row">{{ line.product.name }}</th>
-      <td>{{ line.quantity }}</td>
+      <td class="td-editable"><a class="x-editable">{{ line.quantity }}</a></td>
       <td>{{ line.product.price }}</td>
-      <td>{% widthratio line.product.price 1 line.quantity %}</td>
+      <td class="total-line">{% widthratio line.product.price 1 line.quantity %}</td>
     </tr>
     {% endfor %}
     <tr>
