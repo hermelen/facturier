@@ -5,6 +5,7 @@ from django.views.generic import TemplateView, DetailView, ListView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.shortcuts import render
 from django.urls import reverse
+# from django.urllib2 import request
 
 from .models import Customer, Product, Quotation, ProductList
 # from .forms import QuotationFormSet
@@ -146,3 +147,17 @@ class QuotationListView(ListView):
             return queryset
         else:
             return Quotation.objects.all()
+
+
+class QuotationPdfDetailView(DetailView):
+    model = Quotation
+    template_name = 'app/quotation_pdf.html'
+    def get_context_data(self, *args, **kwargs):
+        context = DetailView.get_context_data(self, *args, **kwargs)
+        lines = self.get_object().productlist_set.all()
+        sum = 0
+        for line in lines:
+            subsum = line.product.price * line.quantity
+            sum += subsum
+        context['sum'] = sum
+        return context

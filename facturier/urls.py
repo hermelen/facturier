@@ -22,7 +22,7 @@ from django.contrib.auth import views as auth_views
 
 from app.views import IndexView, CustomerCreateView, CustomerDetailView, CustomerUpdateView, CustomerDeleteView, CustomerListView
 from app.views import ProductCreateView, ProductDetailView, ProductUpdateView,ProductListView, ProductDeleteView
-from app.views import QuotationDetailView, QuotationCreateView, QuotationListView
+from app.views import QuotationDetailView, QuotationCreateView, QuotationListView, QuotationPdfDetailView
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
 
@@ -43,6 +43,7 @@ urlpatterns = [
 
     url(r'^quotations/', QuotationListView.as_view(), name='quotations-list'),
     url(r'^quotation/create/', QuotationCreateView.as_view(), name='quotation-create'),
+    url(r'^quotation/pdf/(?P<slug>[-\w]+)/$', QuotationPdfDetailView.as_view(), name='quotation-pdf'),
     url(r'^quotation/(?P<slug>[-\w]+)/$', QuotationDetailView.as_view(), name='quotation-detail'),
 
 

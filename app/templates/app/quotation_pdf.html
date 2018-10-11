@@ -1,0 +1,76 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+    <meta charset="utf-8">
+    <title>Facturier</title>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css">
+    <link rel="stylesheet" type="text/css" href="{% static 'bootstrap/dist/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+</head>
+
+<body>
+    <div class="container">
+        <div class="col-12 row">
+            <div class="col-12">
+                <h3>Notre société</h3>
+                <p>Rue Albert Einstein</p>
+                <p>48000 MENDE</p>
+                <p>téléphone: 06 06 06 06 06</p>
+                <p>Siret: 1234546789</p>
+            </div>
+            <div class="offset-8 col-4">
+                <h5>{{ quotation.customer.company }}</h5>
+                <h6>{{ quotation.customer.first_name }} {{ quotation.customer.first_name }}</h6>
+                <p>{{ quotation.customer.address }}</p>
+                <p>{{ quotation.customer.zipcode }} {{ quotation.customer.city }}</p>
+                {{ quotation.customer.phone_number }}
+            </div>
+            <div class="col-12">
+                <h1>
+                {% if quotation.status < 3 %}
+                Devis n° {{ quotation.reference }}
+                {% else %}
+                Facture {{ quotation.reference }}
+                {% endif %}
+            </h1>
+            </div>
+            <div class="offset-8 col-4">
+                A Mende, le {% now "l, j F Y" %}
+            </div>
+            <table class="table mb-5">
+                <thead>
+                    <tr>
+                        <th scope="col">Produit</th>
+                        <th scope="col">Quantité</th>
+                        <th scope="col">Prix unité</th>
+                        <th scope="col">Total</th>
+                    </tr>
+                </thead>
+                <tbody class="mb-5">
+                    {% for line in quotation.productlist_set.all %}
+                    <tr>
+                        <th scope="row">{{ line.product.name }}</th>
+                        <td>{{ line.quantity }}</td>
+                        <td>{{ line.product.price }}</td>
+                        <td>{% widthratio line.product.price 1 line.quantity %}</td>
+                    </tr>
+                    {% endfor %}
+                    <tr>
+                        <th scope="row">Total</th>
+                        <td></td>
+                        <td></td>
+                        <td>{{ sum }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <script src="{% static 'jquery/dist/jquery.min.js' %}"></script>
+    <script src="{% static 'bootstrap/dist/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'js/jquery.formset.js' %}"></script>
+    <script src="{% static 'js/script.js' %}"></script>
+</body>
+
+</html>
