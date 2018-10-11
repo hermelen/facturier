@@ -114,6 +114,16 @@ class QuotationCreateView(CreateWithInlinesView):
 class QuotationDetailView(DetailView):
     model = Quotation
 
+    def get_context_data(self, *args, **kwargs):
+        context = DetailView.get_context_data(self, *args, **kwargs)
+        lines = self.get_object().productlist_set.all()
+        sum = 0
+        for line in lines:
+            subsum = line.product.price * line.quantity
+            sum += subsum
+        context['sum'] = sum
+        return context
+
 
 class QuotationListView(ListView):
     model = Quotation

@@ -41,7 +41,7 @@
   <div class="offset-8 col-4">
     A Mende, le {% now "l, j F Y" %}
   </div>
-  <table class="table">
+  <table class="table mb-5">
   <thead>
     <tr>
       <th scope="col">Produit</th>
@@ -50,7 +50,7 @@
       <th scope="col">Total</th>
     </tr>
   </thead>
-  <tbody>
+  <tbody class="mb-5">
     {% for line in quotation.productlist_set.all %}
     <tr>
       <th scope="row">{{ line.product.name }}</th>
@@ -59,6 +59,12 @@
       <td>{% widthratio line.product.price 1 line.quantity %}</td>
     </tr>
     {% endfor %}
+    <tr>
+      <th scope="row">Total</th>
+      <td></td>
+      <td></td>
+      <td>{{ sum }}</td>
+    </tr>
   </tbody>
 </table>
 </div>
