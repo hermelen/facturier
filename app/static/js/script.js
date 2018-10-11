@@ -8,7 +8,8 @@ $(document).ready(function(){
     $('.x-editable').click(function(){
       $('div.editable-input input' ).keypress(function() {
         // $(this).closest('.single-line').css('background-color', 'blue');
-        console.log($(this).closest('.single-line:nth-child(3)'));
+        var container = $(this).closest('.single-line').find('.total-line');
+        container.html('toto');
       });
     });
 })
