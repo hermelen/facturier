@@ -6,12 +6,12 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.shortcuts import render
 from django.urls import reverse
 # from django.urllib2 import request
-
-from .models import Customer, Product, Quotation, ProductList
-# from .forms import QuotationFormSet
-
 from extra_views import InlineFormSet, CreateWithInlinesView, UpdateWithInlinesView
 from extra_views.generic import GenericInlineFormSet
+
+# from .forms import QuotationFormSet
+from .models import Customer, Product, Quotation, ProductList, quotationStatus
+
 
 class IndexView(TemplateView):
     template_name = "app/index.html"
@@ -115,29 +115,12 @@ class QuotationCreateView(CreateWithInlinesView):
 class QuotationDetailView(DetailView):
     model = Quotation
 
-    def get_context_data(self, *args, **kwargs):
-        context = DetailView.get_context_data(self, *args, **kwargs)
-        lines = self.get_object().productlist_set.all()
-        sum = 0
-        for line in lines:
-            subsum = line.product.price * line.quantity
-            sum += subsum
-        context['sum'] = sum
-        return context
-
-
 class QuotationListView(ListView):
     model = Quotation
 
     def get_context_data(self, *args, **kwargs):
         context = ListView.get_context_data(self, *args, **kwargs)
-        context["choices"] = [
-            (1, "devis en cours"),
-            (2, "devis annulé"),
-            (3, "facture en attente"),
-            (4, "facture à relancer"),
-            (5, "facture réglée"),
-        ]
+        context["choices"] = quotationStatus
         return context
 
     def get_queryset(self):
