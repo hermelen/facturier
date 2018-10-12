@@ -14,5 +14,10 @@
     "facturier"
   ],
   "author": "hermelen.com",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "bootstrap": "^4.1.3",
+    "jquery": "^3.3.1",
+    "x-editable": "^1.5.1"
+  }
 }

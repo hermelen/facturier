@@ -6,10 +6,15 @@ $(document).ready(function(){
     $('.x-editable').editable();
 
     $('.x-editable').click(function(){
-      $('div.editable-input input' ).keypress(function() {
-        // $(this).closest('.single-line').css('background-color', 'blue');
-        var container = $(this).closest('.single-line').find('.total-line');
-        container.html('toto');
+      $('button.editable-submit').click(function() {
+        var single_line = $(this).closest('.single-line');
+        var total_field = single_line.find('.total-field');
+        var price = single_line.find('.price-field').html();
+        var quantity = $('div.editable-input input').val();
+        var price_dot = price.replace(',', '.');
+        var total = price_dot * quantity;
+        // var total_comma = total.replace('.', ',');
+        total_field.html(total);
       });
     });
 })

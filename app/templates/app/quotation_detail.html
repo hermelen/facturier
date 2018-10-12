@@ -55,15 +55,15 @@
     <tr class="single-line">
       <th scope="row">{{ line.product.name }}</th>
       <td class="td-editable"><a class="x-editable">{{ line.quantity }}</a></td>
-      <td>{{ line.product.price }}</td>
-      <td class="total-line">{% widthratio line.product.price 1 line.quantity %}</td>
+      <td class="price-field">{{ line.product.price }}</td>
+      <td class="total-field">{% widthratio line.product.price 1 line.quantity %}</td>
     </tr>
     {% endfor %}
     <tr>
       <th scope="row">Total</th>
       <td></td>
       <td></td>
-      <td>{{ sum }}</td>
+      <td class="total">{{ sum }}</td>
     </tr>
   </tbody>
 </table>
