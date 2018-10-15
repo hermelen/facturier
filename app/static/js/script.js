@@ -4,20 +4,20 @@ $(document).ready(function(){
 
 
     $.fn.editable.defaults.mode = 'inline';
-    $('.x-editable').editable();
+    $('.x-editable-quantity').editable();
 
     var total_initial = 0;
 
     var each_line = $('.single-line').each(function(){
       var single_line = $(this).closest('.single-line');
-      var total_field = single_line.find('.total-field');
+      // var total_field = single_line.find('.total-field');
       var price = single_line.find('.price-field').html();
-      var quantity = single_line.find('.td-editable a').html();
+      // var quantity = single_line.find('.td-editable a').html();
       var price_dot = price.replace(',', '.');
-      var total = (price_dot * quantity).toFixed(2);
-      var str_total = total.toString()
-      var total_comma = str_total.replace('.', ',');
-      total_field.html(total_comma);
+      // var total = (price_dot * quantity).toFixed(2);
+      // var str_total = total.toString()
+      // var total_comma = str_total.replace('.', ',');
+      // total_field.html(total_comma);
 
       total_initial += (price_dot * quantity);
     });
@@ -30,7 +30,7 @@ $(document).ready(function(){
 
 
 
-    $('.x-editable').click(function(){
+    $('.x-editable-quantity').click(function(){
       var total_quotation = 0
       $('button.editable-submit').click(function() {
         var single_line = $(this).closest('.single-line');

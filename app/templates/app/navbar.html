@@ -1,5 +1,5 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <a class="navbar-brand" href="{% url 'index' %">Facturier</a>
+  <a class="navbar-brand" href="{% url 'index' %}">Facturier</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
@@ -64,7 +64,7 @@
         </div>
       </div>
     </form>
-    {% elif request.path == "/products/" %}
+    {% elif request.resolver_match.url_name == "products-list" %}
     <form class="form-inline" method="get" action="{% url 'products-list' %}">
       <div class="input-group">
           <input name="q" type="text" class="form-control" aria-label="Recipient's username" aria-describedby="button-addon2">
@@ -75,7 +75,7 @@
           </div>
       </div>
     </form>
-    {% elif request.path == "/quotations/" %}
+    {% elif request.resolver_match.url_name == "quotations-list" %}
     <form class="form-inline" method="get" action="{% url 'quotations-list' %}">
       <div class="input-group">
         <select class="custom-select" id="inputGroupSelect04" name="q">

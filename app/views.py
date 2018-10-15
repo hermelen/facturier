@@ -1,10 +1,13 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 from django.contrib.auth.models import User
-from django.views.generic import TemplateView, DetailView, ListView
+from django.views.decorators.csrf import csrf_exempt #decorator
+from django.views.generic import TemplateView, DetailView, ListView, View
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.shortcuts import render
 from django.urls import reverse
+from django.utils.decorators import method_decorator #decorator
+from django.http import HttpResponse
 # from django.urllib2 import request
 from extra_views import InlineFormSet, CreateWithInlinesView, UpdateWithInlinesView
 from extra_views.generic import GenericInlineFormSet
@@ -111,7 +114,7 @@ class QuotationCreateView(CreateWithInlinesView):
     def get_success_url(self):
         return reverse("quotation-detail", args=[self.object.slug])
 
-
+@method_decorator(csrf_exempt, name = 'dispatch')
 class QuotationDetailView(DetailView):
     model = Quotation
 
@@ -144,3 +147,22 @@ class QuotationPdfDetailView(DetailView):
             sum += subsum
         context['sum'] = sum
         return context
+
+
+@method_decorator(csrf_exempt, name = 'dispatch')
+class ProductListUpdateView(View):
+
+    def post(self, request):
+        productlist = ProductList.objects.get(pk=request.POST.get('pk'))
+        setattr(productlist,request.POST.get("name"),request.POST.get("value"))
+        productlist.save()
+        return HttpResponse({'success' :'True'})
+
+
+@method_decorator(csrf_exempt, name = 'dispatch')
+class ProductListDeleteView(View):
+
+    def post(self, request):
+        productlist = ProductList.objects.get(pk=request.POST.get('id'))
+        productlist.delete()
+        return HttpResponse({'success' :'True'})
