@@ -84,6 +84,10 @@ class ProductListView(ListView):
         else:
             return Product.objects.all()
 
+
+
+
+
 class ProductUpdateView(UpdateView):
     model = Product
     fields = "__all__"
@@ -114,9 +118,16 @@ class QuotationCreateView(CreateWithInlinesView):
     def get_success_url(self):
         return reverse("quotation-detail", args=[self.object.slug])
 
+
 @method_decorator(csrf_exempt, name = 'dispatch')
 class QuotationDetailView(DetailView):
     model = Quotation
+
+    def get_context_data(self, *args, **kwargs):
+        context = DetailView.get_context_data(self, *args, **kwargs)
+        context["products"] = Product.objects.all()
+        return context
+
 
 class QuotationListView(ListView):
     model = Quotation
@@ -151,6 +162,7 @@ class QuotationPdfDetailView(DetailView):
 
 @method_decorator(csrf_exempt, name = 'dispatch')#empeche la validation csrf token
 class ProductListUpdateView(View):
+
     def post(self, request, id, field):
         productlist = ProductList.objects.get(pk=id)
         setattr(productlist,field,request.POST.get("value"))
@@ -163,5 +175,14 @@ class ProductListDeleteView(View):
 
     def post(self, request, id):
         productlist = ProductList.objects.get(pk=id)
+        productlist.delete()
+        return HttpResponse({'success' :'True'})
+
+
+@method_decorator(csrf_exempt, name = 'dispatch')
+class ProductListCreateView(View):
+
+    def post(self, request, id):
+        quotation = Quotation.objects.get(pk=id)
         productlist.delete()
         return HttpResponse({'success' :'True'})

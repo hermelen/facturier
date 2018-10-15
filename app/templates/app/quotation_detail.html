@@ -52,7 +52,7 @@
       <th scope="col">Opérations</th>
     </tr>
   </thead>
-  <tbody class="mb-5">
+  <tbody class="mb-5" id="quotation-table">
     {% for line in quotation.productlist_set.all %}
     <tr class="single-line" id="tr-{{ line.id }}">
       <th scope="row">{{ line.product.name }}</th>
@@ -64,6 +64,28 @@
       </td>
     </tr>
     {% endfor %}
+
+
+
+
+    <tr class="single-line" id="line-to-add">
+      <th scope="row">
+        <select>
+        {% for product in products %}
+          <option>{{ product.name }}</option>
+        {% endfor %}
+        </select>
+      </th>
+      <td class="td-editable"><a class="x-editable-quantity" data-url=""></a></td>
+      <td class="price-field"></td>
+      <td class="total-field"></td>
+      <td class="operations"></td>
+    </tr>
+
+
+
+
+
     <tr>
       <th scope="row">Total</th>
       <td></td>
@@ -73,5 +95,7 @@
     </tr>
   </tbody>
 </table>
+<button action="" type="submit" class="btn btn-secondary add-btn">Ajouter</button>
+<button action="{% url 'productlist-create' quotation.id %}" type="submit" class="btn btn-success create-btn">Enregistrer la ligne</button>
 </div>
 {% endblock %}
