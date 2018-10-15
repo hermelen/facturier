@@ -56,7 +56,7 @@
     {% for line in quotation.productlist_set.all %}
     <tr class="single-line">
       <th scope="row">{{ line.product.name }}</th>
-      <td class="td-editable"><a class="x-editable-quantity" id="quantity" data-pk="{{ line.id }}" data-url="{% url 'productlist-update' %}">{{ line.quantity }}</a></td>
+      <td class="td-editable"><a class="x-editable-quantity" data-url="{% url 'productlist-update' line.id 'quantity' %}">{{ line.quantity }}</a></td>
       <td class="price-field">{{ line.product.price }}</td>
       <td class="total-field">{{ line.product.price|multiply:line.quantity }}</td>
       <td class="operations">

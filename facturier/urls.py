@@ -8,7 +8,7 @@ from django.contrib.auth import views as auth_views
 from app.views import IndexView, CustomerCreateView, CustomerDetailView, CustomerUpdateView, CustomerDeleteView, CustomerListView
 from app.views import ProductCreateView, ProductDetailView, ProductUpdateView,ProductListView, ProductDeleteView
 from app.views import QuotationDetailView, QuotationCreateView, QuotationListView, QuotationPdfDetailView
-from app.views import ProductListUpdateView, ProductListDeleteView
+from app.views import ProductListUpdateView
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
 
@@ -32,8 +32,8 @@ urlpatterns = [
     url(r'^quotation/pdf/(?P<slug>[-\w]+)/$', QuotationPdfDetailView.as_view(), name='quotation-pdf'),
     url(r'^quotation/(?P<slug>[-\w]+)/$', QuotationDetailView.as_view(), name='quotation-detail'),
 
-    url(r'^productline/edit$', ProductListUpdateView.as_view(), name="productlist-update"),
-    url(r'^productline/delete$', ProductListDeleteView.as_view(), name="productlist-delete"),
+    url(r'^productline/(?P<id>[-\w]+)/(?P<field>[-\w]+)/edit$', ProductListUpdateView.as_view(), name="productlist-update"),
+    # url(r'^productline/delete$', ProductListDeleteView.as_view(), name="productlist-delete"),
 
     url(r'^$', IndexView.as_view(), name='index'),
 

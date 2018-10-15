@@ -149,20 +149,26 @@ class QuotationPdfDetailView(DetailView):
         return context
 
 
-@method_decorator(csrf_exempt, name = 'dispatch')
+@method_decorator(csrf_exempt, name = 'dispatch')#empeche la validation csrf token
 class ProductListUpdateView(View):
-
-    def post(self, request):
-        productlist = ProductList.objects.get(pk=request.POST.get('pk'))
-        setattr(productlist,request.POST.get("name"),request.POST.get("value"))
+    def post(self, request, id, field):
+        productlist = ProductList.objects.get(pk=id)
+        setattr(productlist,field,request.POST.get("value"))
         productlist.save()
         return HttpResponse({'success' :'True'})
 
 
-@method_decorator(csrf_exempt, name = 'dispatch')
-class ProductListDeleteView(View):
+    # def post(self, request):
+    #     productlist = ProductList.objects.get(pk=request.POST.get('pk'))
+    #     setattr(productlist,request.POST.get("name"),request.POST.get("value"))
+    #     productlist.save()
+    #     return HttpResponse({'success' :'True'})
 
-    def post(self, request):
-        productlist = ProductList.objects.get(pk=request.POST.get('id'))
-        productlist.delete()
-        return HttpResponse({'success' :'True'})
+#
+# @method_decorator(csrf_exempt, name = 'dispatch')
+# class ProductListDeleteView(View):
+#
+#     def post(self, request):
+#         productlist = ProductList.objects.get(pk=request.POST.get('id'))
+#         productlist.delete()
+#         return HttpResponse({'success' :'True'})
