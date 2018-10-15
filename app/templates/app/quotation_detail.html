@@ -1,13 +1,9 @@
-{% extends "app/base.html" %}
-{% load static %}
-{% load math %}
-{% block left %}
-  {% if request.user.is_authenticated %}
-  <div class="col-12">
-      <div class="card">
+{% extends "app/base.html" %} {% load static %} {% load math %} {% block left %} {% if request.user.is_authenticated %}
+<div class="col-12">
+    <div class="card">
         <div class="card-body">
-          <h4>{{ request.user.first_name }} {{ request.user.last_name }}</h4>
-          <h5> Rôle: {{ request.user.username }}</h3>
+            <h4>{{ request.user.first_name }} {{ request.user.last_name }}</h4>
+            <h5> Rôle: {{ request.user.username }}</h3>
           <p>Email: {{ request.user.email }}</p>
         </div>
       </div>
@@ -25,77 +21,77 @@
   </div>
   <div class="offset-8 col-4">
     <h5>{{ quotation.customer.company }}</h5>
-    <h6>{{ quotation.customer.first_name }} {{ quotation.customer.first_name }}</h6>
-    <p>{{ quotation.customer.address }}</p>
-    <p>{{ quotation.customer.zipcode }} {{ quotation.customer.city }}</p>
-    {{ quotation.customer.phone_number }}
-  </div>
-  <div class="col-12">
-    <h1>
+            <h6>{{ quotation.customer.first_name }} {{ quotation.customer.first_name }}</h6>
+            <p>{{ quotation.customer.address }}</p>
+            <p>{{ quotation.customer.zipcode }} {{ quotation.customer.city }}</p>
+            {{ quotation.customer.phone_number }}
+        </div>
+        <div class="col-12">
+            <h1>
     {% if quotation.status < 3 %}
       Devis n° {{ quotation.reference }}
     {% else %}
       Facture {{ quotation.reference }}
     {% endif %}
     </h1>
-  </div>
-  <div class="offset-8 col-4">
-    A Mende, le {% now "l, j F Y" %}
-  </div>
-  <table class="table mb-5">
-  <thead>
-    <tr>
-      <th scope="col">Produit</th>
-      <th scope="col">Quantité</th>
-      <th scope="col">Prix unité</th>
-      <th scope="col">Total</th>
-      <th scope="col">Opérations</th>
-    </tr>
-  </thead>
-  <tbody class="mb-5" id="quotation-table">
-    {% for line in quotation.productlist_set.all %}
-    <tr class="single-line" id="tr-{{ line.id }}">
-      <th scope="row">{{ line.product.name }}</th>
-      <td class="td-editable"><a class="x-editable-quantity" data-url="{% url 'productlist-update' line.id 'quantity' %}">{{ line.quantity }}</a></td>
-      <td class="price-field">{{ line.product.price }}</td>
-      <td class="total-field">{{ line.product.price|multiply:line.quantity }}</td>
-      <td class="operations">
-      <button action="{% url 'productlist-delete' line.id %}" type="submit" id="{{ line.id }}" class="btn btn-warning delete-btn">Delete</button>
-      </td>
-    </tr>
-    {% endfor %}
+        </div>
+        <div class="offset-8 col-4">
+            A Mende, le {% now "l, j F Y" %}
+        </div>
+        <table class="table mb-5">
+            <thead>
+                <tr>
+                    <th scope="col">Produit</th>
+                    <th scope="col">Quantité</th>
+                    <th scope="col">Prix unité</th>
+                    <th scope="col">Total</th>
+                    <th scope="col">Opérations</th>
+                </tr>
+            </thead>
+            <tbody class="mb-5" id="quotation-table">
+                {% for line in quotation.productlist_set.all %}
+                <tr class="single-line" id="tr-{{ line.id }}">
+                    <th scope="row">{{ line.product.name }}</th>
+                    <td class="td-editable"><a class="x-editable-quantity" data-url="{% url 'productlist-update' line.id 'quantity' %}">{{ line.quantity }}</a></td>
+                    <td class="price-field">{{ line.product.price }}</td>
+                    <td class="total-field">{{ line.product.price|multiply:line.quantity }}</td>
+                    <td class="operations">
+                        <button action="{% url 'productlist-delete' line.id %}" type="submit" id="{{ line.id }}" class="btn btn-warning delete-btn">Delete</button>
+                    </td>
+                </tr>
+                {% endfor %}
+                <tr class="single-line" id="line-to-add">
+                    <form method="post" action="{% url 'productlist-create' quotation.id %}" >
+                        <th scope="row">
+                            <select name="product">
+                                {% for product in products %}
+                                <option value="{{ product }}">{{ product.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </th>
+                        <td class="td-editable"><input type="text" name="quantity"/></td>
+                        <td class="price-field"></td>
+                        <td class="total-field"></td>
+                        <td class="operations">
+                            <button action="{% url 'productlist-create' quotation.id %}" type="submit" class="btn btn-success create-btn">Enregistrer la ligne</button>
+                        </td>
+
+                    </form>
+                </tr>
 
 
 
 
-    <tr class="single-line" id="line-to-add">
-      <th scope="row">
-        <select>
-        {% for product in products %}
-          <option>{{ product.name }}</option>
-        {% endfor %}
-        </select>
-      </th>
-      <td class="td-editable"><a class="x-editable-quantity" data-url=""></a></td>
-      <td class="price-field"></td>
-      <td class="total-field"></td>
-      <td class="operations"></td>
-    </tr>
 
-
-
-
-
-    <tr>
-      <th scope="row">Total</th>
-      <td></td>
-      <td></td>
-      <td class="total">{{ sum }}</td>
-      <td></td>
-    </tr>
-  </tbody>
-</table>
-<button action="" type="submit" class="btn btn-secondary add-btn">Ajouter</button>
-<button action="{% url 'productlist-create' quotation.id %}" type="submit" class="btn btn-success create-btn">Enregistrer la ligne</button>
-</div>
-{% endblock %}
+                <tr>
+                    <th scope="row">Total</th>
+                    <td></td>
+                    <td></td>
+                    <td class="total">{{ sum }}</td>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
+        <button action="" type="submit" class="btn btn-secondary add-btn">Ajouter</button>
+    </div>
+    {% endblock %}

@@ -176,13 +176,23 @@ class ProductListDeleteView(View):
     def post(self, request, id):
         productlist = ProductList.objects.get(pk=id)
         productlist.delete()
-        return HttpResponse({'success' :'True'})
+        return HttpResponse({'success' :True})
 
 
 @method_decorator(csrf_exempt, name = 'dispatch')
 class ProductListCreateView(View):
 
     def post(self, request, id):
-        quotation = Quotation.objects.get(pk=id)
-        productlist.delete()
-        return HttpResponse({'success' :'True'})
+        if(request.POST):
+
+            productlist_data = request.POST.dict()
+            product = request.POST.get("product")
+            quantity = request.POST.get("quantity")
+            quotation = id
+            n = ProductList(product = product, quantity=quantity,quotation=quotation)
+            n.save()
+            return HttpResponse({'success' :True})
+        # quotation = Quotation.objects.get(pk=id)
+        # setattr(productlist,"product",request.POST.get("value"))
+        # productlist.save()
+        # return HttpResponse({'success' :True})
