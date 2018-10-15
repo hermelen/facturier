@@ -56,12 +56,12 @@
                     <td class="price-field">{{ line.product.price }}</td>
                     <td class="total-field">{{ line.product.price|multiply:line.quantity }}</td>
                     <td class="operations">
-                        <button action="{% url 'productlist-delete' line.id %}" type="submit" id="{{ line.id }}" class="btn btn-warning delete-btn">Delete</button>
+                        <button data-url="{% url 'productlist-delete' line.id %}" type="button" class="btn btn-warning delete-btn">Delete</button>
                     </td>
                 </tr>
                 {% endfor %}
                 <tr class="single-line" id="line-to-add">
-                    <form method="post" action="{% url 'productlist-create' quotation.id %}" >
+                    <form id="product_list_form" method="post" action="{% url 'productlist-create' quotation.id %}" >
                         {%csrf_token%}
                         <th scope="row">
                           {{ product_list_form.product }}
@@ -69,16 +69,12 @@
                         <td class="td-editable">
                           {{ product_list_form.quantity }}
                         </td>
-                        <td class="price-field">{{ product_list_form.quotation }}</td>
+                        <td class="price-field"></td>
                         <td class="total-field"></td>
                         <td class="operations">
-                          <button type="submit" name="button">+</button>
+                          <button action="{% url 'productlist-create' quotation.id %}" type="submit" class="btn btn-success create-btn">Valider</button>
                         </td>
-                        {# {{ product_list_form.quotation }} #}
-                        {# {{ product_list_form.as_p}} #}
-
-
-
+                        {{ product_list_form.quotation }}
                     </form>
                 </tr>
 
