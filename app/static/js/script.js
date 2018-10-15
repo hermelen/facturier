@@ -12,7 +12,7 @@ $(document).ready(function(){
       var single_line = $(this).closest('.single-line');
       // var total_field = single_line.find('.total-field');
       var price = single_line.find('.price-field').html();
-      // var quantity = single_line.find('.td-editable a').html();
+      var quantity = single_line.find('.td-editable a').html();
       var price_dot = price.replace(',', '.');
       // var total = (price_dot * quantity).toFixed(2);
       // var str_total = total.toString()

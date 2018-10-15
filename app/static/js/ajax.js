@@ -1,5 +1,9 @@
+$('.delete-btn').click(function(){
+    deleteCommand();
+})
 function deleteCommand(svCommandId) {
            var url = $('.delete-btn').attr('action');
+           url += 'delete/';
            $.ajax({
                url: url,
                type: "DELETE",
@@ -15,3 +19,4 @@ function deleteCommand(svCommandId) {
                    addMessage("Delete failed!");
                }
            });
+       }
