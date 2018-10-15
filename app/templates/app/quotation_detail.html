@@ -62,19 +62,22 @@
                 {% endfor %}
                 <tr class="single-line" id="line-to-add">
                     <form method="post" action="{% url 'productlist-create' quotation.id %}" >
+                        {%csrf_token%}
                         <th scope="row">
-                            <select name="product">
-                                {% for product in products %}
-                                <option value="{{ product }}">{{ product.name }}</option>
-                                {% endfor %}
-                            </select>
+                          {{ product_list_form.product }}
                         </th>
-                        <td class="td-editable"><input type="text" name="quantity"/></td>
-                        <td class="price-field"></td>
+                        <td class="td-editable">
+                          {{ product_list_form.quantity }}
+                        </td>
+                        <td class="price-field">{{ product_list_form.quotation }}</td>
                         <td class="total-field"></td>
                         <td class="operations">
-                            <button action="{% url 'productlist-create' quotation.id %}" type="submit" class="btn btn-success create-btn">Enregistrer la ligne</button>
+                          <button type="submit" name="button">+</button>
                         </td>
+                        {# {{ product_list_form.quotation }} #}
+                        {# {{ product_list_form.as_p}} #}
+
+
 
                     </form>
                 </tr>

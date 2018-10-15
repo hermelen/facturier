@@ -12,7 +12,7 @@ from django.http import HttpResponse
 from extra_views import InlineFormSet, CreateWithInlinesView, UpdateWithInlinesView
 from extra_views.generic import GenericInlineFormSet
 
-# from .forms import QuotationFormSet
+from .forms import ProductListForm
 from .models import Customer, Product, Quotation, ProductList, quotationStatus
 
 
@@ -126,6 +126,7 @@ class QuotationDetailView(DetailView):
     def get_context_data(self, *args, **kwargs):
         context = DetailView.get_context_data(self, *args, **kwargs)
         context["products"] = Product.objects.all()
+        context["product_list_form"] = ProductListForm(initial={"quotation" : self.get_object()})
         return context
 
 
@@ -179,19 +180,27 @@ class ProductListDeleteView(View):
         return HttpResponse({'success' :True})
 
 
-@method_decorator(csrf_exempt, name = 'dispatch')
-class ProductListCreateView(View):
+# @method_decorator(csrf_exempt, name = 'dispatch')
+class ProductListCreateView(CreateView):
+    model = ProductList
+    form_class = ProductListForm
 
-    def post(self, request, id):
-        if(request.POST):
+    def post(self, request, **kwargs):
+        CreateView.post(self, request, kwargs)
+        return HttpResponse({'id'})
 
-            productlist_data = request.POST.dict()
-            product = request.POST.get("product")
-            quantity = request.POST.get("quantity")
-            quotation = id
-            n = ProductList(product = product, quantity=quantity,quotation=quotation)
-            n.save()
-            return HttpResponse({'success' :True})
+    def get_success_url(self):
+        return reverse("quotation-detail", args=[self.object.quotation.slug])
+    # def post(self, request, id):
+    #     if(request.POST):
+    #
+    #         productlist_data = request.POST.dict()
+    #         product = request.POST.get("product")
+    #         quantity = request.POST.get("quantity")
+    #         quotation = id
+    #         n = ProductList(product = product, quantity=quantity,quotation=quotation)
+    #         n.save()
+    #         return HttpResponse({'success' :True})
         # quotation = Quotation.objects.get(pk=id)
         # setattr(productlist,"product",request.POST.get("value"))
         # productlist.save()
