@@ -54,13 +54,13 @@
   </thead>
   <tbody class="mb-5">
     {% for line in quotation.productlist_set.all %}
-    <tr class="single-line">
+    <tr class="single-line" id="tr-{{ line.id }}">
       <th scope="row">{{ line.product.name }}</th>
       <td class="td-editable"><a class="x-editable-quantity" data-url="{% url 'productlist-update' line.id 'quantity' %}">{{ line.quantity }}</a></td>
       <td class="price-field">{{ line.product.price }}</td>
       <td class="total-field">{{ line.product.price|multiply:line.quantity }}</td>
       <td class="operations">
-      <button action="{{ request.build_absolute_uri }}" type="submit" id="{{ line.id }}" class="btn btn-warning delete-btn">Delete</button>
+      <button action="{% url 'productlist-delete' line.id %}" type="submit" id="{{ line.id }}" class="btn btn-warning delete-btn">Delete</button>
       </td>
     </tr>
     {% endfor %}

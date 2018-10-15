@@ -33,7 +33,7 @@ urlpatterns = [
     url(r'^quotation/(?P<slug>[-\w]+)/$', QuotationDetailView.as_view(), name='quotation-detail'),
 
     url(r'^productline/(?P<id>[-\w]+)/(?P<field>[-\w]+)/edit$', ProductListUpdateView.as_view(), name="productlist-update"),
-    url(r'^productline/(?P<slug>[-\w]+)/delete$', ProductListDeleteView.as_view(), name="productlist-delete"),
+    url(r'^productline/(?P<id>[-\w]+)/delete$', ProductListDeleteView.as_view(), name="productlist-delete"),
 
     url(r'^$', IndexView.as_view(), name='index'),
 

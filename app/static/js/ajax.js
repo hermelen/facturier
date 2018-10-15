@@ -1,22 +1,19 @@
 $('.delete-btn').click(function(){
-    deleteCommand();
+    var idButton = $(this).attr('id')
+    deleteCommand(idButton);
 })
-function deleteCommand(svCommandId) {
+function deleteCommand(idButton) {
            var url = $('.delete-btn').attr('action');
-           url += 'delete/';
            $.ajax({
                url: url,
-               type: "DELETE",
-               dataType: "json",
-               beforeSend: function (xhr) {
-                   xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');
-               },
-               success: function () {
-                   $('#service_command_' + svCommandId).remove();
-                   addMessage("Deleted data successfully");
+               type: "POST",
+               data: idButton,
+               success: function() {
+                 console.log('success');
+                   $('#tr-'+idButton).remove();
                },
                error: function () {
-                   addMessage("Delete failed!");
+                 console.log('error');
                }
            });
        }
