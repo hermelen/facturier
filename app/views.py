@@ -188,9 +188,11 @@ class ProductListCreateView(CreateView):
     def post(self, request, **kwargs):
         CreateView.post(self, request, kwargs)
         return JsonResponse({
+        
             "productName" : self.object.product.name,
             "quantity" : self.object.quantity,
-            "price" : self.object.product.price
+            "price" : self.object.product.price,
+            "id": self.object.id
         })
 
     def get_success_url(self):
