@@ -7,7 +7,7 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.shortcuts import render
 from django.urls import reverse
 from django.utils.decorators import method_decorator #decorator
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 # from django.urllib2 import request
 from extra_views import InlineFormSet, CreateWithInlinesView, UpdateWithInlinesView
 from extra_views.generic import GenericInlineFormSet
@@ -175,7 +175,7 @@ class ProductListUpdateView(View):
 class ProductListDeleteView(View):
 
     def post(self, request, id):
-        productlist = ProductList.objects.get(pk=id)
+        productlist = ProductList.objects.get(id=id)
         productlist.delete()
         return HttpResponse({'success' :True})
 
@@ -187,10 +187,16 @@ class ProductListCreateView(CreateView):
 
     def post(self, request, **kwargs):
         CreateView.post(self, request, kwargs)
-        return HttpResponse({'id'})
+        return JsonResponse({
+            "productName" : self.object.product.name,
+            "quantity" : self.object.quantity,
+            "price" : self.object.product.price
+        })
 
     def get_success_url(self):
         return reverse("quotation-detail", args=[self.object.quotation.slug])
+
+
     # def post(self, request, id):
     #     if(request.POST):
     #
