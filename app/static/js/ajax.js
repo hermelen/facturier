@@ -10,6 +10,7 @@ $('.delete-btn').click(function(){
       data:parent,
       success: function() {
         parent.remove();
+        // $('option').val('');
         console.log('success');
       },
       error: function () {
@@ -44,6 +45,8 @@ $('#line-to-add').show();
                 </td>
             </tr>`)
         // console.log(response);
+        $('select option:first-child').attr('selected','selected');
+        $('input').val('');
         //         $('#tr-'+idButton).remove();
       },
       error: function () {
