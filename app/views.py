@@ -15,6 +15,8 @@ from extra_views.generic import GenericInlineFormSet
 from .forms import ProductListForm
 from .models import Customer, Product, Quotation, ProductList, quotationStatus
 
+import urllib
+
 
 class IndexView(TemplateView):
     template_name = "app/index.html"
@@ -185,10 +187,12 @@ class ProductListCreateView(CreateView):
     model = ProductList
     form_class = ProductListForm
 
+
     def post(self, request, **kwargs):
         CreateView.post(self, request, kwargs)
         return JsonResponse({
-        
+            "editable_data_url" : reverse("productlist-update", args=[self.object.id, 'quantity']),
+            "del_button_data_url" : reverse("productlist-delete", args=[self.object.id]),
             "productName" : self.object.product.name,
             "quantity" : self.object.quantity,
             "price" : self.object.product.price,

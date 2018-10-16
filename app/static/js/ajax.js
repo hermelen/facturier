@@ -1,8 +1,6 @@
 $(document).ready(function(){
 $('.delete-btn').click(function(){
     var parent = $(this).parents('.single-line');
-    // console.log(parent);
-    // console.log($(this));
     var url = $(this).data('url');
     $.ajax({
       url: url,
@@ -19,10 +17,6 @@ $('.delete-btn').click(function(){
 })
 
 $('#line-to-add').hide();
-// $('.create-btn').hide();
-
-
-
 $('#line-to-add').show();
 
 
@@ -36,15 +30,17 @@ $('#line-to-add').show();
         $('#line-to-add').before(
             `<tr class="single-line" id="tr-${ response.id }">
                 <th scope="row">${ response.productName }</th>
-                <td class="td-editable"><a class="x-editable-quantity" data-url="{% url 'productlist-update' line.id 'quantity' %}">${ response.quantity }</a></td>
+                <td class="td-editable"><a class="x-editable-quantity" data-url="${ response.editable_data_url }">${ response.quantity }</a></td>
                 <td class="price-field">${ response.price }</td>
                 <td class="total-field">${ response.price*response.quantity }</td>
                 <td class="operations">
-                    <button data-url="{% url 'productlist-delete' line.id %}" type="button" class="btn btn-warning delete-btn">Delete</button>
+                    <button data-url="${ response.del_button_data_url }" type="button" class="btn btn-warning delete-btn">Delete</button>
                 </td>
             </tr>`)
-        // console.log(response);
-        //         $('#tr-'+idButton).remove();
+
+        $('input').val(''); // empty input field
+        $('select').prop('selectedIndex',0); // reset select field
+        console.log(response);
       },
       error: function () {
         console.log('error');
@@ -52,7 +48,6 @@ $('#line-to-add').show();
     });
     event.preventDefault();
   });
-
 })
 
 
