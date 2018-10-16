@@ -1,7 +1,8 @@
 $(document).ready(function(){
-$('.delete-btn').click(function(){
-    var parent = $(this).parents('.single-line');
-    var url = $(this).data('url');
+
+  function deleteProductList(elmt){
+    var parent = elmt.parents('.single-line');
+    var url = elmt.data('url');
     $.ajax({
       url: url,
       type: "POST",
@@ -14,13 +15,19 @@ $('.delete-btn').click(function(){
         console.log('error');
       }
     });
-})
+  }
 
-$('#line-to-add').hide();
-$('#line-to-add').show();
+  $('.delete-btn').click(function(){
+    deleteProductList($(this));
+  });
+
+  $('#line-to-add').hide();
+  $('#line-to-add').show();
 
 
   $('#product_list_form').submit(function(event){
+    event.preventDefault();
+    console.log('submit');
     var url = $(this).attr('action');
     $.ajax({
       url: url,
@@ -30,24 +37,38 @@ $('#line-to-add').show();
         $('#line-to-add').before(
             `<tr class="single-line" id="tr-${ response.id }">
                 <th scope="row">${ response.productName }</th>
-                <td class="td-editable"><a class="x-editable-quantity" data-url="${ response.editable_data_url }">${ response.quantity }</a></td>
+                <td class="td-editable"><a class="x-editable-quantity" data-pk="${ response.id }" data-url="${ response.editable_data_url }">${ response.quantity }</a></td>
                 <td class="price-field">${ response.price }</td>
                 <td class="total-field">${ response.price*response.quantity }</td>
                 <td class="operations">
                     <button data-url="${ response.del_button_data_url }" type="button" class="btn btn-warning delete-btn">Delete</button>
                 </td>
-            </tr>`)
-
-        $('input').val(''); // empty input field
-        $('select').prop('selectedIndex',0); // reset select field
-        console.log(response);
+            </tr>`);
+        $('.delete-btn').click(function(){
+          deleteProductList($(this));
+        });
+        $.fn.editable.defaults.mode = 'inline';
+        $('.x-editable-quantity').editable();
+        $('#product_list_form')[0].reset();
       },
       error: function () {
         console.log('error');
       }
     });
-    event.preventDefault();
   });
+
+// $('.create-btn').click(function(){
+//   clearForm().delay(3000);
+// })
+//
+// function clearForm(){
+//   $('select').prop('selectedIndex',0); // reset select field
+//   $('input').val(''); // empty input field
+// }
+
+
+
+//jquery
 })
 
 
