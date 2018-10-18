@@ -20,48 +20,49 @@
                 <p>téléphone: 06 06 06 06 06</p>
                 <p>Siret: 1234546789</p>
             </div>
-            <div class="offset-8 col-4">
+            <div class="offset-8 col-4"  style="text-align: right">
                 <h5>{{ quotation.customer.company }}</h5>
                 <h6>{{ quotation.customer.first_name }} {{ quotation.customer.first_name }}</h6>
                 <p>{{ quotation.customer.address }}</p>
                 <p>{{ quotation.customer.zipcode }} {{ quotation.customer.city }}</p>
                 {{ quotation.customer.phone_number }}
-            </div>
+            </div><br><br>
             <div class="col-12">
-                <h1>
+                <h1 style="text-align: center;">
                 {% if quotation.status < 3 %}
                 Devis n° {{ quotation.reference }}
                 {% else %}
                 Facture {{ quotation.reference }}
                 {% endif %}
-            </h1>
+            </h1><br><br>
             </div>
-            <div class="offset-8 col-4">
+            <div class="offset-8 col-4" style="text-align: right;">
                 A Mende, le {% now "l, j F Y" %}
             </div>
-            <table class="table mb-5">
+            <br><br>
+            <table class="table mb-5" >
                 <thead>
                     <tr>
-                        <th scope="col">Produit</th>
-                        <th scope="col">Quantité</th>
-                        <th scope="col">Prix unité</th>
-                        <th scope="col">Total</th>
+                        <th style="border-bottom:1pt solid black; width: 150px;" scope="col">Produit</th>
+                        <th style="border-bottom:1pt solid black; width: 150px; text-align: right" scope="col">Quantité</th>
+                        <th style="border-bottom:1pt solid black; width: 150px; text-align: right" scope="col">Prix unité</th>
+                        <th style="border-bottom:1pt solid black; width: 150px; text-align: right" scope="col">Total</th>
                     </tr>
                 </thead>
                 <tbody class="mb-5">
                     {% for line in quotation.productlist_set.all %}
                     <tr>
-                        <th scope="row">{{ line.product.name }}</th>
-                        <td>{{ line.quantity }}</td>
-                        <td>{{ line.product.price }}</td>
-                        <td>{% widthratio line.product.price 1 line.quantity %}</td>
+                        <th style="border-bottom:1pt solid black;" scope="row">{{ line.product.name }}</th>
+                        <td style="border-bottom:1pt solid black; text-align: right;">{{ line.quantity }}</td>
+                        <td style="border-bottom:1pt solid black; text-align: right;">{{ line.product.price }}</td>
+                        <td style="border-bottom:1pt solid black; text-align: right;">{% widthratio line.product.price 1 line.quantity %}</td>
                     </tr>
                     {% endfor %}
                     <tr>
-                        <th scope="row">Total</th>
-                        <td></td>
-                        <td></td>
-                        <td>{{ sum }}</td>
+                        <th style="border-bottom:1pt solid black;" scope="row">Total</th>
+                        <td style="border-bottom:1pt solid black; text-align: right;"></td>
+                        <td style="border-bottom:1pt solid black; text-align: right;"></td>
+                        <td style="border-bottom:1pt solid black; text-align: right;">{{ sum }}</td>
                     </tr>
                 </tbody>
             </table>
