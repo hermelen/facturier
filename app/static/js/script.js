@@ -6,6 +6,18 @@ $(document).ready(function(){
     $.fn.editable.defaults.mode = 'inline';
     $('.x-editable').editable();
 
+    $('.x-editable-select').editable({
+      value: 2,
+      source: [
+        {value: 1,text: 'devis en cours'},
+        {value: 2,text: 'devis annulé'},
+        {value: 3,text: 'facture en attente'},
+        {value: 4,text: 'facture à relancer'},
+        {value: 5,text: 'facture réglée'}
+      ]
+    });
+
+
     var total_initial = 0;
 
     var each_line = $('.single-line').each(function(){

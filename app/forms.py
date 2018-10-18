@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from django.forms import ModelForm
-from .models import ProductList
+from .models import ProductList, Quotation
 #
 #
 # class QuotationForm(ModelForm):

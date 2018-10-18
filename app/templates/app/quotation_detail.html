@@ -34,8 +34,13 @@
       Facture {{ quotation.reference }}
     {% endif %}
     </h1>
-    <button class="btn btn-light"><a class="x-editable" data-pk="{{ quotation.id }}" data-url="{% url 'quotation-update' quotation.id 'status' %}">{{ quotation.status }}</a></button>
-
+      <a class="x-editable-select btn btn-secondary" data-type="select" data-pk="{{ quotation.slug }}" data-url="{% url 'quotation-update' quotation.slug 'status' %}">
+      {% for status in all_status %}
+        {% if quotation.status == status.0 %}
+          {{ status.1 }}
+        {% endif %}
+      {% endfor %}
+      </a>
         </div>
         <div class="offset-8 col-4">
             A Mende, le {% now "l, j F Y" %}

@@ -16,7 +16,8 @@ from extra_views import InlineFormSet, CreateWithInlinesView, UpdateWithInlinesV
 from extra_views.generic import GenericInlineFormSet
 
 from .forms import ProductListForm
-from .models import Customer, Product, Quotation, ProductList, quotationStatus, allStatus, billStatus
+from .models import Customer, Product, Quotation, ProductList
+from .models import quotationStatus, allStatus, billStatus
 from django.db.models import Q
 
 
@@ -134,6 +135,7 @@ class QuotationDetailView(DetailView):
         context = DetailView.get_context_data(self, *args, **kwargs)
         context["products"] = Product.objects.all()
         context["product_list_form"] = ProductListForm(initial={"quotation" : self.get_object()})
+        context["all_status"] = allStatus
         return context
 
 
@@ -243,12 +245,14 @@ class ProductListUpdateView(View):
 
 
 @method_decorator(csrf_exempt, name = 'dispatch')
-class QuotationUpdateView(UpdateView):
-    model = Quotation
-    fields = "__all__"
+class QuotationUpdateView(View):
 
-    def get_success_url(self):
-        return reverse("quotation-update", args=[self.object.slug])
+    def post(self, request, slug, field):
+        quotation = Quotation.objects.get(pk=slug)
+        setattr(quotation,field,request.POST.get("value"))
+        quotation.save()
+        return HttpResponse({'success' :True})
+
 
 @method_decorator(csrf_exempt, name = 'dispatch')
 class ProductListDeleteView(View):
