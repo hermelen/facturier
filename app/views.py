@@ -17,6 +17,8 @@ from extra_views.generic import GenericInlineFormSet
 
 from .forms import ProductListForm
 from .models import Customer, Product, Quotation, ProductList, quotationStatus
+from django.db.models import Q
+
 
 import urllib
 
@@ -136,7 +138,8 @@ class QuotationDetailView(DetailView):
 
 
 class QuotationListView(ListView):
-    model = Quotation
+    quotation = Quotation.objects.filter(Q(status=1) | Q(status=2))
+
 
     def get_context_data(self, *args, **kwargs):
         context = ListView.get_context_data(self, *args, **kwargs)
@@ -149,7 +152,7 @@ class QuotationListView(ListView):
             queryset = Quotation.objects.filter(status = q)
             return queryset
         else:
-            return Quotation.objects.all()
+            return Quotation.objects.filter(Q(status=1) | Q(status=2))
 
 
 class QuotationPdfDetailView(DetailView):
