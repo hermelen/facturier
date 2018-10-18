@@ -8,6 +8,9 @@ from django.shortcuts import render
 from django.urls import reverse
 from django.utils.decorators import method_decorator #decorator
 from django.http import HttpResponse, JsonResponse
+from django.template.loader import render_to_string
+from weasyprint import HTML
+import tempfile
 # from django.urllib2 import request
 from extra_views import InlineFormSet, CreateWithInlinesView, UpdateWithInlinesView
 from extra_views.generic import GenericInlineFormSet
@@ -151,7 +154,8 @@ class QuotationListView(ListView):
 
 class QuotationPdfDetailView(DetailView):
     model = Quotation
-    template_name = 'app/quotation_pdf.html'
+
+
     def get_context_data(self, *args, **kwargs):
         context = DetailView.get_context_data(self, *args, **kwargs)
         lines = self.get_object().productlist_set.all()
@@ -161,6 +165,43 @@ class QuotationPdfDetailView(DetailView):
             sum += subsum
         context['sum'] = sum
         return context
+
+def generate_pdf(request):
+    # model = Quotation
+    quotation = Quotation.objects.filter(slug=slug)
+    # Rendered
+    html_string = render_to_string('templates/app/quotation_pdf.html', {'quotation': self.object})
+    html = HTML(string=html_string)
+    result = html.write_pdf()
+
+    # Creating http response
+    response = HttpResponse(content_type='application/pdf;')
+    response['Content-Disposition'] = 'inline; filename=quotation.pdf'
+    response['Content-Transfer-Encoding'] = 'binary'
+    with tempfile.NamedTemporaryFile(delete=True) as output:
+        output.write(result)
+        output.flush()
+        output = open(output.name, 'r')
+        response.write(output.read())
+
+    return response
+
+
+
+    # template_name = 'app/quotation_pdf.html'
+    # def get_context_data(self, *args, **kwargs):
+    #     context = DetailView.get_context_data(self, *args, **kwargs)
+    #     lines = self.get_object().productlist_set.all()
+    #     sum = 0
+    #     for line in lines:
+    #         subsum = line.product.price * line.quantity
+    #         sum += subsum
+    #     context['sum'] = sum
+    #     return context
+
+
+
+
 
 
 @method_decorator(csrf_exempt, name = 'dispatch')#empeche la validation csrf token
