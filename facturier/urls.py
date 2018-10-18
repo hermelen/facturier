@@ -9,6 +9,8 @@ from app.views import IndexView, CustomerCreateView, CustomerDetailView, Custome
 from app.views import ProductCreateView, ProductDetailView, ProductUpdateView,ProductListView, ProductDeleteView
 from app.views import QuotationDetailView, QuotationCreateView, QuotationListView, QuotationPdfDetailView
 from app.views import ProductListUpdateView, ProductListDeleteView, ProductListCreateView
+
+from app.views import generate_pdf
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
 
@@ -30,6 +32,7 @@ urlpatterns = [
     url(r'^quotations/', QuotationListView.as_view(), name='quotations-list'),
     url(r'^quotation/create/', QuotationCreateView.as_view(), name='quotation-create'),
     url(r'^quotation/pdf/(?P<slug>[-\w]+)/$', QuotationPdfDetailView.as_view(), name='quotation-pdf'),
+    url(r'^generate/pdf/slug=(?P<slug>[-\w]+)/$', generate_pdf, name='generate_pdf'),
     url(r'^quotation/(?P<slug>[-\w]+)/$', QuotationDetailView.as_view(), name='quotation-detail'),
 
     url(r'^productlist/(?P<id>\d+)/delete$', ProductListDeleteView.as_view(), name="productlist-delete"),
