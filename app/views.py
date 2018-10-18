@@ -172,7 +172,8 @@ def generate_pdf(request, slug):
     html_string = render_to_string('app/quotation_pdf.html', {'quotation': quotation})
     html = HTML(string=html_string)
     result = html.write_pdf()
-    # html = HTML('http://127.0.0.1:8000/quotation/ap-web-design-2/').write_pdf('/tmp/weasyprint-website.pdf',
+    # path = reverse("quotation-pdf", args=[slug]),
+    # html = HTML(path).write_pdf('/tmp/weasyprint-website.pdf',
     # stylesheets=[CSS(string='body {font-family: serif !important; }')])
 
     # Creating http response
