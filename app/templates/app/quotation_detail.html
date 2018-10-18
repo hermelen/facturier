@@ -34,6 +34,8 @@
       Facture {{ quotation.reference }}
     {% endif %}
     </h1>
+    <button class="btn btn-light"><a class="x-editable" data-pk="{{ quotation.id }}" data-url="{% url 'quotation-update' quotation.id 'status' %}">{{ quotation.status }}</a></button>
+
         </div>
         <div class="offset-8 col-4">
             A Mende, le {% now "l, j F Y" %}
@@ -52,7 +54,7 @@
                 {% for line in quotation.productlist_set.all %}
                 <tr class="single-line" id="tr-{{ line.id }}">
                     <th scope="row">{{ line.product.name }}</th>
-                    <td class="td-editable"><a class="x-editable-quantity" data-pk="{{ line.id }}" data-url="{% url 'productlist-update' line.id 'quantity' %}">{{ line.quantity }}</a></td>
+                    <td class="td-editable"><a class="x-editable" data-pk="{{ line.id }}" data-url="{% url 'productlist-update' line.id 'quantity' %}">{{ line.quantity }}</a></td>
                     <td class="price-field">{{ line.product.price }}</td>
                     <td class="total-field">{{ line.product.price|multiply:line.quantity }}</td>
                     <td class="operations">

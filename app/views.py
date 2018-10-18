@@ -155,6 +155,8 @@ class QuotationListView(ListView):
             return Quotation.objects.filter(Q(status=1) | Q(status=2))
 
 
+
+
 class BillListView(ListView):
     bill = Quotation.objects.filter(Q(status=3) | Q(status=4) | Q(status=5))
 
@@ -239,6 +241,14 @@ class ProductListUpdateView(View):
         productlist.save()
         return HttpResponse({'success' :True})
 
+
+@method_decorator(csrf_exempt, name = 'dispatch')
+class QuotationUpdateView(UpdateView):
+    model = Quotation
+    fields = "__all__"
+
+    def get_success_url(self):
+        return reverse("quotation-update", args=[self.object.slug])
 
 @method_decorator(csrf_exempt, name = 'dispatch')
 class ProductListDeleteView(View):

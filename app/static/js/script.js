@@ -4,7 +4,7 @@ $(document).ready(function(){
 
 
     $.fn.editable.defaults.mode = 'inline';
-    $('.x-editable-quantity').editable();
+    $('.x-editable').editable();
 
     var total_initial = 0;
 
@@ -30,7 +30,7 @@ $(document).ready(function(){
 
 
 
-    $('.x-editable-quantity').click(function(){
+    $('.x-editable').click(function(){
       var total_quotation = 0
       $('button.editable-submit').click(function() {
         var single_line = $(this).closest('.single-line');
