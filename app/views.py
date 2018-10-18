@@ -9,7 +9,7 @@ from django.urls import reverse
 from django.utils.decorators import method_decorator #decorator
 from django.http import HttpResponse, JsonResponse
 from django.template.loader import render_to_string
-from weasyprint import HTML
+from weasyprint import HTML, CSS
 import tempfile
 # from django.urllib2 import request
 from extra_views import InlineFormSet, CreateWithInlinesView, UpdateWithInlinesView
@@ -154,7 +154,7 @@ class QuotationListView(ListView):
 
 class QuotationPdfDetailView(DetailView):
     model = Quotation
-
+    template_name = "app/quotation_pdf.html"
 
     def get_context_data(self, *args, **kwargs):
         context = DetailView.get_context_data(self, *args, **kwargs)
@@ -166,13 +166,14 @@ class QuotationPdfDetailView(DetailView):
         context['sum'] = sum
         return context
 
-def generate_pdf(request):
-    # model = Quotation
-    quotation = Quotation.objects.filter(slug=slug)
+def generate_pdf(request, slug):
+    quotation = Quotation.objects.get(slug=slug)
     # Rendered
-    html_string = render_to_string('templates/app/quotation_pdf.html', {'quotation': self.object})
+    html_string = render_to_string('app/quotation_pdf.html', {'quotation': quotation})
     html = HTML(string=html_string)
     result = html.write_pdf()
+    # html = HTML('http://127.0.0.1:8000/quotation/ap-web-design-2/').write_pdf('/tmp/weasyprint-website.pdf',
+    # stylesheets=[CSS(string='body {font-family: serif !important; }')])
 
     # Creating http response
     response = HttpResponse(content_type='application/pdf;')
@@ -185,6 +186,9 @@ def generate_pdf(request):
         response.write(output.read())
 
     return response
+
+
+    # return reverse("index")
 
 
 
