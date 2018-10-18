@@ -37,9 +37,20 @@ class Product(models.Model):
     def __unicode__(self):
         return self.name
 
+allStatus = [
+    (1, "devis en cours"),
+    (2, "devis annulé"),
+    (3, "facture en attente"),
+    (4, "facture à relancer"),
+    (5, "facture réglée"),
+]
+
 quotationStatus = [
     (1, "devis en cours"),
     (2, "devis annulé"),
+]
+
+billStatus = [
     (3, "facture en attente"),
     (4, "facture à relancer"),
     (5, "facture réglée"),
@@ -49,7 +60,7 @@ class Quotation(models.Model):
     slug        = AutoSlugField(populate_from='full_name', verbose_name="Slug", null=True, blank=True, unique=True)
     customer  = models.ForeignKey(Customer,on_delete=models.CASCADE)
     reference = models.IntegerField(verbose_name="Référence")
-    status    = models.IntegerField(choices=quotationStatus, null=True, blank=True)
+    status    = models.IntegerField(choices=allStatus, null=True, blank=True)
     creation_date = models.DateTimeField(auto_now_add=True)
     edition_date = models.DateTimeField(auto_now=True)
     limit_date = models.DateTimeField(null=True, blank=True)

@@ -31,7 +31,7 @@
         {% elif quotation.status == 4 %}
         <li class="list-group-item">facture à relancer</li>
         {% else %}
-        <li class="list-group-item">{facture réglée</li>
+        <li class="list-group-item">facture réglée</li>
         {% endif %}
         <li class="list-group-item">Date de création: {{ quotation.creation_date|date:"d/m/Y" }}</li>
         <li class="list-group-item">Date de modification: {{ quotation.edition_date|date:"d/m/Y" }}</li>

@@ -47,6 +47,7 @@
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
           <a class="dropdown-item" href="{% url 'quotations-list' %}">Show Quotations</a>
+          <a class="dropdown-item" href="{% url 'bills-list' %}">Show Bills</a>
           {% if request.user.is_authenticated %}
           <a class="dropdown-item" href="{% url 'quotation-create' %}">Create Quotation</a>
           {% endif %}
@@ -77,6 +78,22 @@
     </form>
     {% elif request.resolver_match.url_name == "quotations-list" %}
     <form class="form-inline" method="get" action="{% url 'quotations-list' %}">
+      <div class="input-group">
+        <select class="custom-select" id="inputGroupSelect04" name="q">
+          <option selected>Choose...</option>
+          {% for choice in choices %}
+          <option value="{{ choice.0 }}">{{ choice.1 }}</option>
+          {% endfor %}
+        </select>
+        <div class="input-group-append">
+          <button class="btn btn-outline-primary" type="submit" id="button-addon2">
+            <i class="fa fa-search"></i>
+          </button>
+        </div>
+      </div>
+    </form>
+    {% elif request.resolver_match.url_name == "bills-list" %}
+    <form class="form-inline" method="get" action="{% url 'bills-list' %}">
       <div class="input-group">
         <select class="custom-select" id="inputGroupSelect04" name="q">
           <option selected>Choose...</option>

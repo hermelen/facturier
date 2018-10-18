@@ -16,7 +16,7 @@ from extra_views import InlineFormSet, CreateWithInlinesView, UpdateWithInlinesV
 from extra_views.generic import GenericInlineFormSet
 
 from .forms import ProductListForm
-from .models import Customer, Product, Quotation, ProductList, quotationStatus
+from .models import Customer, Product, Quotation, ProductList, quotationStatus, allStatus, billStatus
 from django.db.models import Q
 
 
@@ -153,6 +153,24 @@ class QuotationListView(ListView):
             return queryset
         else:
             return Quotation.objects.filter(Q(status=1) | Q(status=2))
+
+
+class BillListView(ListView):
+    bill = Quotation.objects.filter(Q(status=3) | Q(status=4) | Q(status=5))
+
+
+    def get_context_data(self, *args, **kwargs):
+        context = ListView.get_context_data(self, *args, **kwargs)
+        context["choices"] = billStatus
+        return context
+
+    def get_queryset(self):
+        q = self.request.GET.get('q', None)
+        if q is not None:
+            queryset = Quotation.objects.filter(status = q)
+            return queryset
+        else:
+            return Quotation.objects.filter(Q(status=3) | Q(status=4) | Q(status=5))
 
 
 class QuotationPdfDetailView(DetailView):

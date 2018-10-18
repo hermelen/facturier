@@ -7,8 +7,7 @@ from django.contrib.auth import views as auth_views
 
 from app.views import IndexView, CustomerCreateView, CustomerDetailView, CustomerUpdateView, CustomerDeleteView, CustomerListView
 from app.views import ProductCreateView, ProductDetailView, ProductUpdateView,ProductListView, ProductDeleteView
-from app.views import QuotationDetailView, QuotationCreateView, QuotationListView
-from app.views import QuotationPdfDetailView
+from app.views import QuotationDetailView, QuotationCreateView, QuotationListView, QuotationPdfDetailView, BillListView
 from app.views import ProductListUpdateView, ProductListDeleteView, ProductListCreateView
 
 from app.views import generate_pdf
@@ -31,6 +30,7 @@ urlpatterns = [
     url(r'^product/(?P<slug>[-\w]+)/$', ProductDetailView.as_view(), name='product-detail'),
 
     url(r'^quotations/', QuotationListView.as_view(), name='quotations-list'),
+    url(r'^bills/', BillListView.as_view(), name='bills-list'),
     url(r'^quotation/create/', QuotationCreateView.as_view(), name='quotation-create'),
     url(r'^quotation/pdf/(?P<slug>[-\w]+)/$', QuotationPdfDetailView.as_view(), name='quotation-pdf'),
     url(r'^generate/pdf/(?P<slug>[-\w]+)/$', generate_pdf, name='generate-pdf'),
