@@ -57,13 +57,13 @@ billStatus = [
 ]
 
 class Quotation(models.Model):
-    slug        = AutoSlugField(populate_from='full_name', verbose_name="Slug", null=True, blank=True, unique=True)
-    customer  = models.ForeignKey(Customer,on_delete=models.CASCADE)
-    reference = models.IntegerField(verbose_name="Référence")
-    status    = models.IntegerField(choices=allStatus, null=True, blank=True)
+    slug          = AutoSlugField(populate_from='full_name', verbose_name="Slug", null=True, blank=True, unique=True)
+    customer      = models.ForeignKey(Customer,on_delete=models.CASCADE)
+    reference     = models.IntegerField(verbose_name="Référence")
+    status        = models.IntegerField(choices=allStatus, null=True, blank=True)
     creation_date = models.DateTimeField(auto_now_add=True)
-    edition_date = models.DateTimeField(auto_now=True)
-    limit_date = models.DateTimeField(null=True, blank=True)
+    edition_date  = models.DateTimeField(auto_now=True)
+    limit_date    = models.DateTimeField(null=True, blank=True)
 
     def full_name(self):
         return "%s %s" %(self.customer.company, self.reference)#construc du slug à partir de name et ref
@@ -73,8 +73,8 @@ class Quotation(models.Model):
 
 
 class ProductList(models.Model):
-    product = models.ForeignKey(Product,on_delete=models.CASCADE)
-    quantity = models.IntegerField(verbose_name="Quantité")
+    product   = models.ForeignKey(Product,on_delete=models.CASCADE)
+    quantity  = models.IntegerField(verbose_name="Quantité")
     quotation = models.ForeignKey(Quotation,on_delete=models.CASCADE)
 
     def __unicode__(self):
