@@ -20,6 +20,8 @@ from .models import Customer, Product, Quotation, ProductList
 from .models import quotationStatus, allStatus, billStatus
 from django.db.models import Q
 
+from django.apps import apps
+
 
 import urllib
 
@@ -176,7 +178,7 @@ class BillListView(ListView):
         else:
             return Quotation.objects.filter(Q(status=3) | Q(status=4) | Q(status=5))
 
-
+print(apps.get_app_config('app').path)
 class QuotationPdfDetailView(DetailView):
     model = Quotation
     template_name = "app/quotation_pdf.html"
@@ -193,13 +195,16 @@ class QuotationPdfDetailView(DetailView):
 
 def generate_pdf(request, slug):
     quotation = Quotation.objects.get(slug=slug)
+    status = quotation.status
+    if status < 3:
+        status = 'devis'
+    else:
+        status = 'facture'
     # Rendered
     html_string = render_to_string('app/quotation_pdf.html', {'quotation': quotation})
     html = HTML(string=html_string)
+    app_path = apps.get_app_config('app').path
     result = html.write_pdf()
-    # path = reverse("quotation-pdf", args=[slug]),
-    # html = HTML(path).write_pdf('/tmp/weasyprint-website.pdf',
-    # stylesheets=[CSS(string='body {font-family: serif !important; }')])
 
     # Creating http response
     response = HttpResponse(content_type='application/pdf;')
@@ -210,6 +215,7 @@ def generate_pdf(request, slug):
         output.flush()
         output = open(output.name, 'r')
         response.write(output.read())
+    html.write_pdf(app_path+'/media/'+status+'-'+slug+'.pdf')
 
     return response
 
@@ -248,7 +254,7 @@ class ProductListUpdateView(View):
 class QuotationUpdateView(View):
 
     def post(self, request, id, field):
-        quotation = Quotation.objects.get(pk=id)
+        quotation = Quotation.objects.get(pk=i)
         setattr(quotation,field,request.POST.get("value"))
         quotation.save()
         return HttpResponse({'success' :True})
