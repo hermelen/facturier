@@ -34,7 +34,7 @@ urlpatterns = [
     url(r'^quotation/create/', QuotationCreateView.as_view(), name='quotation-create'),
     url(r'^quotation/pdf/(?P<slug>[-\w]+)/$', QuotationPdfDetailView.as_view(), name='quotation-pdf'),
     url(r'^generate/pdf/(?P<slug>[-\w]+)/$', generate_pdf, name='generate-pdf'),
-    url(r'^quotation/(?P<slug>[-\w]+)/(?P<field>[-\w]+)/edit$', QuotationUpdateView.as_view(), name="quotation-update"),
+    url(r'^quotation/(?P<id>[-\w]+)/(?P<field>[-\w]+)/edit$', QuotationUpdateView.as_view(), name="quotation-update"),
     url(r'^quotation/(?P<slug>[-\w]+)/$', QuotationDetailView.as_view(), name='quotation-detail'),
 
     url(r'^productlist/(?P<id>\d+)/delete$', ProductListDeleteView.as_view(), name="productlist-delete"),

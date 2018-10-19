@@ -34,7 +34,7 @@
       Facture {{ quotation.reference }}
     {% endif %}
     </h1>
-      <a class="x-editable-select btn btn-secondary" data-type="select" data-pk="{{ quotation.slug }}" data-url="{% url 'quotation-update' quotation.slug 'status' %}">
+      <a class="x-editable-select btn btn-secondary" data-type="select" data-pk="{{ quotation.id }}" data-url="{% url 'quotation-update' quotation.id 'status' %}">
       {% for status in all_status %}
         {% if quotation.status == status.0 %}
           {{ status.1 }}
