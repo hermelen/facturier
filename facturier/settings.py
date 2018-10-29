@@ -71,9 +71,13 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'facturier.wsgi.application'
 
-EMAIL_HOST = 'localhost'
+# EMAIL_HOST = 'localhost'
+# EMAIL_PORT = 587
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
