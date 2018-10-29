@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 from django.contrib.auth.models import User
+from django.contrib.auth.mixins import PermissionRequiredMixin
+
 from django.views.decorators.csrf import csrf_exempt #decorator
 from django.views.generic import TemplateView, DetailView, ListView, View
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
@@ -24,7 +26,7 @@ from django.db.models import Q
 
 from django.apps import apps
 
-from facturier.extra_settings import MAIL_HOST_USER, EMAIL_HOST_PASSWORD
+from facturier.extra_settings import EMAIL_HOST_USER, EMAIL_HOST_PASSWORD
 
 import urllib
 
@@ -36,30 +38,13 @@ class IndexView(TemplateView):
         context = TemplateView.get_context_data(self, **kwargs)
 
 
-class CustomerCreateView(CreateView):
+class CustomerCreateView(PermissionRequiredMixin,CreateView):
     model = Customer
     fields = '__all__'
+    permission_required = 'app.add_customer'
 
     def get_success_url(self):
         return reverse("customer-detail", args=[self.object.slug])
-
-class CustomerDetailView(DetailView):
-    model = Customer
-
-
-class CustomerUpdateView(UpdateView):
-    model = Customer
-    fields = "__all__"
-
-    def get_success_url(self):
-        return reverse("customer-detail", args=[self.object.slug])
-
-
-class CustomerDeleteView(DeleteView):
-    model = Customer
-
-    def get_success_url(self):
-        return reverse("customers-list")
 
 
 class CustomerListView(ListView):
@@ -74,16 +59,35 @@ class CustomerListView(ListView):
             return Customer.objects.all()
 
 
-class ProductCreateView(CreateView):
+class CustomerDetailView(DetailView):
+    model = Customer
+
+
+class CustomerUpdateView(PermissionRequiredMixin, UpdateView):
+    model = Customer
+    fields = "__all__"
+    permission_required = 'app.change_customer'
+
+    def get_success_url(self):
+        return reverse("customer-detail", args=[self.object.slug])
+
+
+class CustomerDeleteView(PermissionRequiredMixin, DeleteView):
+    model = Customer
+    permission_required = 'app.delete_customer'
+
+
+    def get_success_url(self):
+        return reverse("customers-list")
+
+
+class ProductCreateView(PermissionRequiredMixin, CreateView):
     model = Product
     fields = '__all__'
+    permission_required = 'app.add_product'
 
     def get_success_url(self):
         return reverse("product-detail", args=[self.object.slug])
-
-
-class ProductDetailView(DetailView):
-    model = Product
 
 
 class ProductListView(ListView):
@@ -98,19 +102,24 @@ class ProductListView(ListView):
             return Product.objects.all()
 
 
+class ProductDetailView(DetailView):
+    model = Product
 
 
-
-class ProductUpdateView(UpdateView):
+class ProductUpdateView(PermissionRequiredMixin, UpdateView):
     model = Product
     fields = "__all__"
+    permission_required = 'app.change_product'
+
 
     def get_success_url(self):
         return reverse("product-detail", args=[self.object.slug])
 
 
-class ProductDeleteView(DeleteView):
+class ProductDeleteView(PermissionRequiredMixin, DeleteView):
     model = Product
+    permission_required = 'app.delete_product'
+
 
     def get_success_url(self):
         return reverse("products-list")
@@ -121,27 +130,28 @@ class ProductListInline(InlineFormSet):
     fields = "__all__"
 
 
-class QuotationCreateView(CreateWithInlinesView):
+@method_decorator(csrf_exempt, name = 'dispatch')#empeche la validation csrf token
+class ProductListUpdateView(PermissionRequiredMixin, View):
+        permission_required = 'app.change_productlist'
+
+        def post(self, request, id, field):
+            productlist = ProductList.objects.get(pk=id)
+            setattr(productlist,field,request.POST.get("value"))
+            productlist.save()
+            return HttpResponse({'success' :True})
+
+
+class QuotationCreateView(PermissionRequiredMixin, CreateWithInlinesView):
     model = Quotation
     inlines = [ProductListInline,]
     fields = "__all__"
     template_name = 'app/quotation_form.html'
     success_url = '/'
+    permission_required = 'app.add_product'
+
 
     def get_success_url(self):
         return reverse("quotation-detail", args=[self.object.slug])
-
-
-@method_decorator(csrf_exempt, name = 'dispatch')
-class QuotationDetailView(DetailView):
-    model = Quotation
-
-    def get_context_data(self, *args, **kwargs):
-        context = DetailView.get_context_data(self, *args, **kwargs)
-        context["products"] = Product.objects.all()
-        context["product_list_form"] = ProductListForm(initial={"quotation" : self.get_object()})
-        context["all_status"] = allStatus
-        return context
 
 
 class QuotationListView(ListView):
@@ -162,6 +172,27 @@ class QuotationListView(ListView):
             return Quotation.objects.filter(Q(status=1) | Q(status=2))
 
 
+@method_decorator(csrf_exempt, name = 'dispatch')
+class QuotationDetailView(DetailView):
+    model = Quotation
+
+    def get_context_data(self, *args, **kwargs):
+        context = DetailView.get_context_data(self, *args, **kwargs)
+        context["products"] = Product.objects.all()
+        context["product_list_form"] = ProductListForm(initial={"quotation" : self.get_object()})
+        context["all_status"] = allStatus
+        return context
+
+
+@method_decorator(csrf_exempt, name = 'dispatch')
+class QuotationUpdateView(PermissionRequiredMixin,View):
+            permission_required = 'app.change_quotation'
+
+            def post(self, request, id, field):
+                quotation = Quotation.objects.get(pk=i)
+                setattr(quotation,field,request.POST.get("value"))
+                quotation.save()
+                return HttpResponse({'success' :True})
 
 
 class BillListView(ListView):
@@ -181,7 +212,7 @@ class BillListView(ListView):
         else:
             return Quotation.objects.filter(Q(status=3) | Q(status=4) | Q(status=5))
 
-print(apps.get_app_config('app').path)
+
 class QuotationPdfDetailView(DetailView):
     model = Quotation
     template_name = "app/quotation_pdf.html"
@@ -195,6 +226,7 @@ class QuotationPdfDetailView(DetailView):
             sum += subsum
         context['sum'] = sum
         return context
+
 
 def generate_pdf(request, slug):
     quotation = Quotation.objects.get(slug=slug)
@@ -218,9 +250,9 @@ def generate_pdf(request, slug):
     email = EmailMessage(
         'Hello '+customerName,
         'Please find in attachment your ' + status,
-        MAIL_HOST_USER,
+        EMAIL_HOST_USER,
         [customerMail],
-        [MAIL_HOST_USER],
+        [EMAIL_HOST_USER],
         reply_to=['another@example.com'],
         headers={'Message-ID': 'foo'},
     )
@@ -228,31 +260,18 @@ def generate_pdf(request, slug):
     email.send()
 
     return HttpResponse(pdf, content_type='application/pdf')
+    
 
 
 
-@method_decorator(csrf_exempt, name = 'dispatch')#empeche la validation csrf token
-class ProductListUpdateView(View):
 
-    def post(self, request, id, field):
-        productlist = ProductList.objects.get(pk=id)
-        setattr(productlist,field,request.POST.get("value"))
-        productlist.save()
-        return HttpResponse({'success' :True})
+
+
 
 
 @method_decorator(csrf_exempt, name = 'dispatch')
-class QuotationUpdateView(View):
-
-    def post(self, request, id, field):
-        quotation = Quotation.objects.get(pk=i)
-        setattr(quotation,field,request.POST.get("value"))
-        quotation.save()
-        return HttpResponse({'success' :True})
-
-
-@method_decorator(csrf_exempt, name = 'dispatch')
-class ProductListDeleteView(View):
+class ProductListDeleteView(PermissionRequiredMixin, View):
+    permission_required = 'app.delete_productlist'
 
     def post(self, request, id):
         productlist = ProductList.objects.get(id=id)
@@ -261,9 +280,10 @@ class ProductListDeleteView(View):
 
 
 # @method_decorator(csrf_exempt, name = 'dispatch')
-class ProductListCreateView(CreateView):
+class ProductListCreateView(PermissionRequiredMixin, CreateView):
     model = ProductList
     form_class = ProductListForm
+    permission_required = 'app.add_productlist'
 
 
     def post(self, request, **kwargs):
@@ -326,9 +346,9 @@ class ProductListCreateView(CreateView):
 #     email = EmailMessage(
 #         'Hello '+customerName,
 #         'Please find in attachment your ' + status,
-#         MAIL_HOST_USER,
+#         EMAIL_HOST_USER,
 #         [customerMail],
-#         [MAIL_HOST_USER],
+#         [EMAIL_HOST_USER],
 #         reply_to=['another@example.com'],
 #         headers={'Message-ID': 'foo'},
 #     )
