@@ -24,7 +24,7 @@ from django.db.models import Q
 
 from django.apps import apps
 
-from facturier.extra_settings import MAIL_HOST_USER, EMAIL_HOST_PASSWORD
+from facturier.extra_settings import EMAIL_HOST_USER, EMAIL_HOST_PASSWORD
 
 import urllib
 
@@ -218,9 +218,9 @@ def generate_pdf(request, slug):
     email = EmailMessage(
         'Hello '+customerName,
         'Please find in attachment your ' + status,
-        MAIL_HOST_USER,
+        EMAIL_HOST_USER,
         [customerMail],
-        [MAIL_HOST_USER],
+        [EMAIL_HOST_USER],
         reply_to=['another@example.com'],
         headers={'Message-ID': 'foo'},
     )
@@ -326,9 +326,9 @@ class ProductListCreateView(CreateView):
 #     email = EmailMessage(
 #         'Hello '+customerName,
 #         'Please find in attachment your ' + status,
-#         MAIL_HOST_USER,
+#         EMAIL_HOST_USER,
 #         [customerMail],
-#         [MAIL_HOST_USER],
+#         [EMAIL_HOST_USER],
 #         reply_to=['another@example.com'],
 #         headers={'Message-ID': 'foo'},
 #     )
