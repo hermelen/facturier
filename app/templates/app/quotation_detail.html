@@ -21,7 +21,7 @@
   </div>
   <div class="offset-8 col-4">
     <h5>{{ quotation.customer.company }}</h5>
-            <h6>{{ quotation.customer.first_name }} {{ quotation.customer.first_name }}</h6>
+            <h6>{{ quotation.customer.first_name.capitalize }} {{ quotation.customer.last_name.upper }}</h6>
             <p>{{ quotation.customer.address }}</p>
             <p>{{ quotation.customer.zipcode }} {{ quotation.customer.city }}</p>
             {{ quotation.customer.phone_number }}
@@ -116,6 +116,13 @@
                 </tr>
             </tbody>
         </table>
+        <div class="col-12">
+          {% if quotation.status < 3 %}
+            Devis valable jusqu'au {{ quotation.limit_date }}
+          {% else %}
+            Facture à régler avant le {{ quotation.limit_date }}
+          {% endif %}
+        </div>
     </div>
     <a class="btn btn-danger" href="{% url 'generate-pdf' quotation.slug %}">Export PDF</a>
     {% endblock %}

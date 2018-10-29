@@ -189,7 +189,7 @@ class QuotationUpdateView(PermissionRequiredMixin,View):
             permission_required = 'app.change_quotation'
 
             def post(self, request, id, field):
-                quotation = Quotation.objects.get(pk=i)
+                quotation = Quotation.objects.get(pk=id)
                 setattr(quotation,field,request.POST.get("value"))
                 quotation.save()
                 return HttpResponse({'success' :True})
@@ -231,7 +231,7 @@ class QuotationPdfDetailView(DetailView):
 def generate_pdf(request, slug):
     quotation = Quotation.objects.get(slug=slug)
     customerMail = quotation.customer.email
-    customerName = quotation.customer.first_name
+    customerName = quotation.customer.first_name.capitalize() +' '+ quotation.customer.last_name.capitalize()
 
     lines = quotation.productlist_set.all()
     sum = 0
@@ -254,8 +254,8 @@ def generate_pdf(request, slug):
     pdf = HTML(string=html_string, base_url=url).write_pdf()
 
     email = EmailMessage(
-        'Hello '+customerName,
-        'Please find in attachment your ' + status,
+        status.capitalize() + ': ' + quotation.slug,
+        'Hi '+ customerName +', please find in attachment your ' + status,
         EMAIL_HOST_USER,
         [customerMail],
         [EMAIL_HOST_USER],
