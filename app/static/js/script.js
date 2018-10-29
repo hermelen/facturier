@@ -1,7 +1,7 @@
 $(document).ready(function(){
 
     $('#quotation-form div').formset();
-
+    getTotal();
 
     $.fn.editable.defaults.mode = 'inline';
     $('.x-editable').editable();
@@ -17,28 +17,21 @@ $(document).ready(function(){
       ]
     });
 
+    function getTotal(){
+      var total_initial = 0;
+      var each_line = $('.single-line').each(function(){
+        var single_line = $(this).closest('.single-line');
+        var price = single_line.find('.price-field').html();
+        var quantity = single_line.find('.td-editable a').html();
+        var price_dot = price.replace(',', '.');
+        var sub_total = price_dot * quantity;
+        total_initial += parseInt(sub_total);
+      });
 
-    var total_initial = 0;
-
-    var each_line = $('.single-line').each(function(){
-      var single_line = $(this).closest('.single-line');
-      // var total_field = single_line.find('.total-field');
-      var price = single_line.find('.price-field').html();
-      var quantity = single_line.find('.td-editable a').html();
-      var price_dot = price.replace(',', '.');
-      // var total = (price_dot * quantity).toFixed(2);
-      // var str_total = total.toString()
-      // var total_comma = str_total.replace('.', ',');
-      // total_field.html(total_comma);
-
-      total_initial += (price_dot * quantity);
-    });
-
-    total_initial = total_initial.toFixed(2).toString();
-    total_initial = total_initial.replace('.', ',');
-
-    $('.total').html(total_initial);
-
+      total_initial = total_initial.toFixed(2).toString();
+      total_initial = total_initial.replace('.', ',');
+      $('.total').html(total_initial);
+    };
 
 
 
@@ -60,7 +53,6 @@ $(document).ready(function(){
           var total = single_line.find('.total-field').html();
           total = total.replace(',','.');
           total_quotation += parseFloat(total);
-          console.log(total_quotation);
         });
 
         total_quotation = total_quotation.toFixed(2);

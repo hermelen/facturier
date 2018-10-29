@@ -254,7 +254,7 @@ class ProductListUpdateView(View):
 class QuotationUpdateView(View):
 
     def post(self, request, id, field):
-        quotation = Quotation.objects.get(pk=i)
+        quotation = Quotation.objects.get(pk=id)
         setattr(quotation,field,request.POST.get("value"))
         quotation.save()
         return HttpResponse({'success' :True})

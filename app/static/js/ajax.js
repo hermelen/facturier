@@ -27,7 +27,6 @@ $(document).ready(function(){
 
   $('#product_list_form').submit(function(event){
     event.preventDefault();
-    console.log('submit');
     var url = $(this).attr('action');
     $.ajax({
       url: url,
