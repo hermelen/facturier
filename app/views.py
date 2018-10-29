@@ -14,6 +14,7 @@ import tempfile
 # from django.urllib2 import request
 from extra_views import InlineFormSet, CreateWithInlinesView, UpdateWithInlinesView
 from extra_views.generic import GenericInlineFormSet
+from django.core.mail import send_mail
 
 from .forms import ProductListForm
 from .models import Customer, Product, Quotation, ProductList
@@ -195,29 +196,36 @@ class QuotationPdfDetailView(DetailView):
 
 def generate_pdf(request, slug):
     quotation = Quotation.objects.get(slug=slug)
-    status = quotation.status
-    if status < 3:
-        status = 'devis'
-    else:
-        status = 'facture'
-    # Rendered
-    html_string = render_to_string('app/quotation_pdf.html', {'quotation': quotation})
-    html = HTML(string=html_string)
-    app_path = apps.get_app_config('app').path
-    result = html.write_pdf()
+    mail = quotation.customer.email
+    send_mail(
+        'Subject here',
+        'Here is the message.',
+        'aurelie.prunieres@gmail.com',
+        [mail],
+        fail_silently=False,
+    )
 
-    # Creating http response
-    response = HttpResponse(content_type='application/pdf;')
-    response['Content-Disposition'] = 'inline; filename=quotation.pdf'
-    response['Content-Transfer-Encoding'] = 'binary'
-    with tempfile.NamedTemporaryFile(delete=True) as output:
-        output.write(result)
-        output.flush()
-        output = open(output.name, 'r')
-        response.write(output.read())
-    html.write_pdf(app_path+'/media/'+status+'-'+slug+'.pdf')
-
-    return response
+    # status = quotation.status
+    # if status < 3:
+    #     status = 'devis'
+    # else:
+    #     status = 'facture'
+    # html_string = render_to_string('app/quotation_pdf.html', {'quotation': quotation})
+    # html = HTML(string=html_string)
+    # app_path = apps.get_app_config('app').path
+    # result = html.write_pdf()
+    #
+    # response = HttpResponse(content_type='application/pdf;')
+    # response['Content-Disposition'] = 'inline; filename=quotation.pdf'
+    # response['Content-Transfer-Encoding'] = 'binary'
+    # with tempfile.NamedTemporaryFile(delete=True) as output:
+    #     output.write(result)
+    #     output.flush()
+    #     output = open(output.name, 'r')
+    #     response.write(output.read())
+    # html.write_pdf(app_path+'/media/'+status+'-'+slug+'.pdf')
+    #
+    # return response
 
 
     # return reverse("index")
@@ -254,7 +262,7 @@ class ProductListUpdateView(View):
 class QuotationUpdateView(View):
 
     def post(self, request, id, field):
-        quotation = Quotation.objects.get(pk=id)
+        quotation = Quotation.objects.get(pk=i)
         setattr(quotation,field,request.POST.get("value"))
         quotation.save()
         return HttpResponse({'success' :True})
