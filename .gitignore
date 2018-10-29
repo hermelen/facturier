@@ -1,7 +1,6 @@
-*.pyc
+**/*.pyc
 /node_modules/
 /app/media/
 /app/static/.sass-cache
 As_role_I_want_that_value.ods
-.~lock.As_role_I_want_that_value.ods#
 /facturier/extra_settings.py
