@@ -31,8 +31,12 @@
     </ul>
   </div>
   <div class="card-body btn-container">
+    {% if perms.app and perms.app.change_customer %}
     <a href="{% url 'customer-update' customer.slug %}" class="btn btn-info">Modifier</a>
+    {% endif %}
+    {% if perms.app and perms.app.delete_customer %}
     <a href="{% url 'customer-delete' customer.slug %}" class="btn btn-secondary">Supprimer</a>
+    {% endif %}
   </div>
 </div>
 {% endblock %}

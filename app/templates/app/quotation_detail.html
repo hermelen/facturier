@@ -34,6 +34,7 @@
       Facture {{ quotation.reference }}
     {% endif %}
     </h1>
+      {% if perms.app and perms.app.change_quotation %}
       <a class="x-editable-select btn btn-secondary" data-type="select" data-pk="{{ quotation.id }}" data-url="{% url 'quotation-update' quotation.id 'status' %}">
       {% for status in all_status %}
         {% if quotation.status == status.0 %}
@@ -41,6 +42,9 @@
         {% endif %}
       {% endfor %}
       </a>
+      {% else %}
+      <h2>{{ quotation.get_status_display }}</h2>
+      {% endif %}
         </div>
         <div class="offset-8 col-4">
             A Mende, le {% now "l, j F Y" %}
@@ -52,21 +56,34 @@
                     <th scope="col">Quantité</th>
                     <th scope="col">Prix unité</th>
                     <th scope="col">Total</th>
-                    <th scope="col">Opérations</th>
+                    <th scope="col">
+                      {% if perms.app and perms.app.change_product or perms.app and perms.app.delete_product %}
+                      Opérations
+                      {% endif %}
+                    </th>
                 </tr>
             </thead>
             <tbody class="mb-5" id="quotation-table">
                 {% for line in quotation.productlist_set.all %}
                 <tr class="single-line" id="tr-{{ line.id }}">
                     <th scope="row">{{ line.product.name }}</th>
-                    <td class="td-editable"><a class="x-editable" data-pk="{{ line.id }}" data-url="{% url 'productlist-update' line.id 'quantity' %}">{{ line.quantity }}</a></td>
+                    <td class="td-editable">
+                      {% if perms.app and perms.app.change_productlist %}
+                      <a class="x-editable" data-pk="{{ line.id }}" data-url="{% url 'productlist-update' line.id 'quantity' %}">{{ line.quantity }}</a>
+                      {% else %}
+                      <a href="#">{{ line.quantity }}</a>
+                      {% endif %}
+                    </td>
                     <td class="price-field">{{ line.product.price }}</td>
                     <td class="total-field">{{ line.product.price|multiply:line.quantity }}</td>
                     <td class="operations">
+                      {% if perms.app and perms.app.delete_productlist %}
                         <button data-url="{% url 'productlist-delete' line.id %}" type="button" class="btn btn-warning delete-btn">Delete</button>
+                      {% endif %}
                     </td>
                 </tr>
                 {% endfor %}
+                {% if perms.app and perms.app.add_productlist %}
                 <tr id="line-to-add">
                     <form id="product_list_form" method="post" action="{% url 'productlist-create' quotation.id %}" >
                         {%csrf_token%}
@@ -84,6 +101,7 @@
                         {{ product_list_form.quotation }}
                     </form>
                 </tr>
+                {% endif %}
 
 
 

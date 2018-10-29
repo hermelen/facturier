@@ -233,13 +233,19 @@ def generate_pdf(request, slug):
     customerMail = quotation.customer.email
     customerName = quotation.customer.first_name
 
+    lines = quotation.productlist_set.all()
+    sum = 0
+    for line in lines:
+        subsum = line.product.price * line.quantity
+        sum += subsum
+
     status = quotation.status
     if status < 3:
         status = 'devis'
     else:
         status = 'facture'
 
-    html_string = render_to_string('app/quotation_pdf.html', {'quotation': quotation})
+    html_string = render_to_string('app/quotation_pdf.html', {'quotation': quotation, 'sum': sum})
     response = HttpResponse(content_type='application/pdf')
     response['Content-Disposition'] = 'filename='+status+'-'+slug+'.pdf'
     response['Content-Transfer-Encoding'] = 'binary'
@@ -260,7 +266,7 @@ def generate_pdf(request, slug):
     email.send()
 
     return HttpResponse(pdf, content_type='application/pdf')
-    
+
 
 
 

@@ -27,7 +27,9 @@
       </ul>
       <div class="card-body btn-container">
         <a href="{% url 'customer-detail' customer.slug %}" class="btn btn-secondary">Voir plus</a>
+        {% if perms.app and perms.app.change_customer %}
         <a href="{% url 'customer-update' customer.slug %}" class="btn btn-info">Modifier</a>
+        {% endif %}
       </div>
     </div>
   </div>

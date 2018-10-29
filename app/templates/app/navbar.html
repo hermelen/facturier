@@ -25,7 +25,7 @@
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
           <a class="dropdown-item" href="{% url 'customers-list' %}">Show customers</a>
-          {% if request.user.is_authenticated %}
+          {% if perms.app and perms.app.add_customer %}
             <a class="dropdown-item" href="{% url 'customer-create' %}">Create customer</a>
           {% endif %}
         </div>
@@ -36,7 +36,7 @@
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
           <a class="dropdown-item" href="{% url 'products-list' %}">Show products</a>
-          {% if request.user.is_authenticated %}
+          {% if perms.app and perms.app.add_product %}
           <a class="dropdown-item" href="{% url 'product-create' %}">Create Product</a>
           {% endif %}
         </div>
@@ -48,7 +48,7 @@
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
           <a class="dropdown-item" href="{% url 'quotations-list' %}">Show Quotations</a>
           <a class="dropdown-item" href="{% url 'bills-list' %}">Show Bills</a>
-          {% if request.user.is_authenticated %}
+          {% if perms.app and perms.app.add_quotation %}
           <a class="dropdown-item" href="{% url 'quotation-create' %}">Create Quotation</a>
           {% endif %}
         </div>
