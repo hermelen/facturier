@@ -14,7 +14,8 @@ import tempfile
 # from django.urllib2 import request
 from extra_views import InlineFormSet, CreateWithInlinesView, UpdateWithInlinesView
 from extra_views.generic import GenericInlineFormSet
-from django.core.mail import send_mail
+# from django.core.mail import send_mail
+from django.core.mail import EmailMessage
 
 from .forms import ProductListForm
 from .models import Customer, Product, Quotation, ProductList
@@ -23,6 +24,7 @@ from django.db.models import Q
 
 from django.apps import apps
 
+from facturier.extra_settings import MAIL_HOST_USER, EMAIL_HOST_PASSWORD
 
 import urllib
 
@@ -196,55 +198,36 @@ class QuotationPdfDetailView(DetailView):
 
 def generate_pdf(request, slug):
     quotation = Quotation.objects.get(slug=slug)
-    mail = quotation.customer.email
-    send_mail(
-        'Subject here',
-        'Here is the message.',
-        'aurelie.prunieres@gmail.com',
-        [mail],
-        fail_silently=False,
+    customerMail = quotation.customer.email
+    customerName = quotation.customer.first_name
+
+    status = quotation.status
+    if status < 3:
+        status = 'devis'
+    else:
+        status = 'facture'
+
+    html_string = render_to_string('app/quotation_pdf.html', {'quotation': quotation})
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'filename='+status+'-'+slug+'.pdf'
+    response['Content-Transfer-Encoding'] = 'binary'
+
+    url = reverse('quotation-pdf', args=[slug] )
+    pdf = HTML(string=html_string, base_url=url).write_pdf()
+
+    email = EmailMessage(
+        'Hello '+customerName,
+        'Please find in attachment your ' + status,
+        MAIL_HOST_USER,
+        [customerMail],
+        [MAIL_HOST_USER],
+        reply_to=['another@example.com'],
+        headers={'Message-ID': 'foo'},
     )
+    email.attach(status+'-'+slug+'.pdf', pdf, "application/pdf")
+    email.send()
 
-    # status = quotation.status
-    # if status < 3:
-    #     status = 'devis'
-    # else:
-    #     status = 'facture'
-    # html_string = render_to_string('app/quotation_pdf.html', {'quotation': quotation})
-    # html = HTML(string=html_string)
-    # app_path = apps.get_app_config('app').path
-    # result = html.write_pdf()
-    #
-    # response = HttpResponse(content_type='application/pdf;')
-    # response['Content-Disposition'] = 'inline; filename=quotation.pdf'
-    # response['Content-Transfer-Encoding'] = 'binary'
-    # with tempfile.NamedTemporaryFile(delete=True) as output:
-    #     output.write(result)
-    #     output.flush()
-    #     output = open(output.name, 'r')
-    #     response.write(output.read())
-    # html.write_pdf(app_path+'/media/'+status+'-'+slug+'.pdf')
-    #
-    # return response
-
-
-    # return reverse("index")
-
-
-
-    # template_name = 'app/quotation_pdf.html'
-    # def get_context_data(self, *args, **kwargs):
-    #     context = DetailView.get_context_data(self, *args, **kwargs)
-    #     lines = self.get_object().productlist_set.all()
-    #     sum = 0
-    #     for line in lines:
-    #         subsum = line.product.price * line.quantity
-    #         sum += subsum
-    #     context['sum'] = sum
-    #     return context
-
-
-
+    return HttpResponse(pdf, content_type='application/pdf')
 
 
 
@@ -312,3 +295,60 @@ class ProductListCreateView(CreateView):
         # setattr(productlist,"product",request.POST.get("value"))
         # productlist.save()
         # return HttpResponse({'success' :True})
+
+
+
+# def generate_pdf(request, slug):
+#     quotation = Quotation.objects.get(slug=slug)
+#     customerMail = quotation.customer.email
+#     customerName = quotation.customer.first_name
+#
+#     status = quotation.status
+#     if status < 3:
+#         status = 'devis'
+#     else:
+#         status = 'facture'
+#     html_string = render_to_string('app/quotation_pdf.html', {'quotation': quotation})
+#     html = HTML(string=html_string)
+#     app_path = apps.get_app_config('app').path
+#     result = html.write_pdf()
+#
+#     response = HttpResponse(content_type='application/pdf;')
+#     response['Content-Disposition'] = 'inline; filename=quotation.pdf'
+#     response['Content-Transfer-Encoding'] = 'binary'
+#     with tempfile.NamedTemporaryFile(delete=True) as output:
+#         output.write(result)
+#         output.flush()
+#         output = open(output.name, 'r')
+#         response.write(output.read())
+#     html.write_pdf(app_path+'/media/'+status+'-'+slug+'.pdf')
+#
+#     email = EmailMessage(
+#         'Hello '+customerName,
+#         'Please find in attachment your ' + status,
+#         MAIL_HOST_USER,
+#         [customerMail],
+#         [MAIL_HOST_USER],
+#         reply_to=['another@example.com'],
+#         headers={'Message-ID': 'foo'},
+#     )
+#     email.attach(app_path+'/media/'+status+'-'+slug+'.pdf', 'img_data', 'image/pdf')
+#     email.send()
+#
+#     return response
+#
+#
+#     return reverse("index")
+#
+#
+#
+#     template_name = 'app/quotation_pdf.html'
+#     def get_context_data(self, *args, **kwargs):
+#         context = DetailView.get_context_data(self, *args, **kwargs)
+#         lines = self.get_object().productlist_set.all()
+#         sum = 0
+#         for line in lines:
+#             subsum = line.product.price * line.quantity
+#             sum += subsum
+#         context['sum'] = sum
+#         return context
