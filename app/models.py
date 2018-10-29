@@ -36,6 +36,7 @@ class Product(models.Model):
 
     def __unicode__(self):
         return self.name
+    
 
 allStatus = [
     (1, "devis en cours"),
