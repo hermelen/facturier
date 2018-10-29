@@ -1,3 +1,5 @@
 *.pyc
 /node_modules/
 /app/static/.sass-cache
+/app/media
+As_role_I_want_that_value.ods
