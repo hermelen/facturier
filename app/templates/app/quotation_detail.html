@@ -67,7 +67,7 @@
                     </td>
                 </tr>
                 {% endfor %}
-                <tr class="single-line" id="line-to-add">
+                <tr id="line-to-add">
                     <form id="product_list_form" method="post" action="{% url 'productlist-create' quotation.id %}" >
                         {%csrf_token%}
                         <th scope="row">
